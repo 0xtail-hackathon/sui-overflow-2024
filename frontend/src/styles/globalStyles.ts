@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
   /* HTML, body 태그 기본 스타일 설정 */
   html, body {
     height: 100%;
+    font-size: 16px; // root font size (rem 기준값 설정)
     font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
     color: #333;

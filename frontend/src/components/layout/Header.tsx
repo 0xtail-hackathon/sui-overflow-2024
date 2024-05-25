@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
-import '@suiet/wallet-kit/style.css';
+import "@suiet/wallet-kit/style.css";
 
 const HeaderContainer = styled.header`
     background-color: white;
