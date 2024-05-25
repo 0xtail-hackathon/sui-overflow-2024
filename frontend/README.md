@@ -1,30 +1,45 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Cocktail OTC for Sui Overflow 2024
+Team: **0xtail**
 
-Currently, two official plugins are available:
+Contributors:
+- Seokhun Yoon (@imysh578)
+- Doyoung Kim (@Do-youngKim)
+- Yujin Park (@owenPark256)
+- Jina Lee (@jijijjj)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## What is CocktailOTC?
+Our CocktailOTC provides a seamless platform for token transactions without the need for a centralized exchange.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Features
+**Sellers:**
 
-- Configure the top-level `parserOptions` property like this:
+- Create a Sell Offer: List your tokens for sale by setting your desired amount and price.
+- Flexible Pricing: You have complete control over the pricing of your tokens.
+- Secure Transactions: Our platform ensures that your transactions are safe and reliable.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+**For Buyers:**
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Browse Sell Offers: View a variety of sell offers to find the tokens you need.
+- Select and Purchase: Choose the sell offer that fits your requirements and complete your purchase with ease.
+- Transparent Deals: All offers are clearly listed, providing you with all the information needed to make informed decisions.
+
+## Why CocktailOTC?
+**Safety and Transparency** 
+
+All transactions are managed by **Sui contracts**, ensuring that every trade is conducted securely and transparently. You can trust that your transactions are protected by robust blockchain technology.
+
+
+## Code
+### Client
+
+Client code can be found in the `frontend` folder.
+
+### Contracts
+
+Smart contracts can be found in `contracts` folder.
+
+### Sui
+
+Contracts are deployed on Sui testnet.
