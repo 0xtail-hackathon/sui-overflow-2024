@@ -7,6 +7,7 @@ const FooterContainer = styled.footer`
     padding: 1rem;
     color: white;
     text-align: center;
+    font-family: ${({ theme }) => theme.fonts.primary};
 `;
 
 const Footer: React.FC = () => {
