@@ -5,7 +5,15 @@ import GlobalStyle from "@styles/globalStyles";
 import theme from "@styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { WalletProvider } from "@suiet/wallet-kit";
+import {
+    ElliWallet,
+    EthosWallet,
+    FrontierWallet,
+    GlassWallet,
+    SuietWallet,
+    SuiWallet,
+    WalletProvider
+} from "@suiet/wallet-kit";
 import Header from "@components/layout/Header";
 import Footer from "@components/layout/Footer";
 import Sidebar from "@components/layout/Sidebar";
@@ -44,7 +52,14 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <GlobalStyle />
-                <WalletProvider>
+                <WalletProvider defaultWallets={[
+                    SuietWallet,
+                    SuiWallet,
+                    EthosWallet,
+                    ElliWallet,
+                    FrontierWallet,
+                    GlassWallet
+                ]}>
                     <Router>
                         <Layout>
                             <Header />
