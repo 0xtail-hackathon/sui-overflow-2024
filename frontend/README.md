@@ -1,7 +1,7 @@
 
-# Cocktail OTC for Sui Overflow 2024
+# Cocktail Finance for Sui Overflow 2024
 Team: **0xtail**
-
+Project Name: Cocktail Finance
 Contributors:
 - Seokhun Yoon (@imysh578)
 - Doyoung Kim (@Do-youngKim)
@@ -9,8 +9,8 @@ Contributors:
 - Jina Lee (@jijijjj)
 
 
-## What is CocktailOTC?
-Our CocktailOTC provides a seamless platform for token transactions without the need for a centralized exchange.
+## What is Cocktail Finance?
+Our Cocktail Finance provides a seamless platform for token transactions without the need for a centralized exchange.
 
 ### Features
 **Sellers:**
@@ -25,7 +25,7 @@ Our CocktailOTC provides a seamless platform for token transactions without the 
 - Select and Purchase: Choose the sell offer that fits your requirements and complete your purchase with ease.
 - Transparent Deals: All offers are clearly listed, providing you with all the information needed to make informed decisions.
 
-## Why CocktailOTC?
+## Why Cocktail Finance?
 **Safety and Transparency** 
 
 All transactions are managed by **Sui contracts**, ensuring that every trade is conducted securely and transparently. You can trust that your transactions are protected by robust blockchain technology.
