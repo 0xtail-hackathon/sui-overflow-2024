@@ -1,7 +1,9 @@
 
 # Cocktail Finance for Sui Overflow 2024
 Team: **0xtail**
+
 Project Name: Cocktail Finance
+
 Contributors:
 - Seokhun Yoon (@imysh578)
 - Doyoung Kim (@Do-youngKim)
