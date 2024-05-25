@@ -59,6 +59,7 @@ const Header: React.FC = () => {
         console.log("connected wallet name: ", wallet.name);
         console.log("account address: ", wallet.account?.address);
         console.log("account publicKey: ", wallet.account?.publicKey);
+        console.log("connected network: ", wallet.chain?.name);
     }, [wallet.connected]);
 
     return (
@@ -66,7 +67,7 @@ const Header: React.FC = () => {
             <Logo>Cocktail.Fi</Logo>
             <SearchBar placeholder="Search for anything..." />
             <ButtonGroup>
-                <NetworkButton>SUI Network</NetworkButton>
+                <NetworkButton>{wallet.chain?.name}</NetworkButton>
                 <CustomConnectButton />
             </ButtonGroup>
         </HeaderContainer>
