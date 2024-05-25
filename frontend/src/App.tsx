@@ -5,6 +5,7 @@ import GlobalStyle from "@styles/globalStyles";
 import theme from "@styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { WalletProvider } from "@suiet/wallet-kit";
 import Header from "@components/layout/Header";
 import Footer from "@components/layout/Footer";
 import Sidebar from "@components/layout/Sidebar";
@@ -43,34 +44,36 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <GlobalStyle />
-                <Router>
-                    <Layout>
-                        <Header />
-                        <Body>
-                            <Sidebar />
-                            <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route
-                                    path="/point-market"
-                                    element={<PointMarket />}
-                                />
-                                <Route
-                                    path="/otc-market"
-                                    element={<OTCMarket />}
-                                />
-                                <Route
-                                    path="/analytics"
-                                    element={<Analytics />}
-                                />
-                                <Route
-                                    path="/settings"
-                                    element={<Settings />}
-                                />
-                            </Routes>
-                        </Body>
-                        <Footer />
-                    </Layout>
-                </Router>
+                <WalletProvider>
+                    <Router>
+                        <Layout>
+                            <Header />
+                            <Body>
+                                <Sidebar />
+                                <Routes>
+                                    <Route path="/" element={<Home />} />
+                                    <Route
+                                        path="/point-market"
+                                        element={<PointMarket />}
+                                    />
+                                    <Route
+                                        path="/otc-market"
+                                        element={<OTCMarket />}
+                                    />
+                                    <Route
+                                        path="/analytics"
+                                        element={<Analytics />}
+                                    />
+                                    <Route
+                                        path="/settings"
+                                        element={<Settings />}
+                                    />
+                                </Routes>
+                            </Body>
+                            <Footer />
+                        </Layout>
+                    </Router>
+                </WalletProvider>
             </QueryClientProvider>
         </ThemeProvider>
     );

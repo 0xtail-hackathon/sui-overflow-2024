@@ -1,6 +1,7 @@
 // src/components/layout/Header.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 
 const HeaderContainer = styled.header`
     background-color: white;
@@ -31,7 +32,16 @@ const ButtonGroup = styled.div`
     gap: 10px;
 `;
 
-const Button = styled.button`
+const NetworkButton = styled.button`
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: white;
+    cursor: pointer;
+`;
+
+const CustomConnectButton = styled(ConnectButton)`
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -41,13 +51,22 @@ const Button = styled.button`
 `;
 
 const Header: React.FC = () => {
+    const wallet = useWallet();
+
+    useEffect(() => {
+        if (!wallet.connected) return;
+        console.log("connected wallet name: ", wallet.name);
+        console.log("account address: ", wallet.account?.address);
+        console.log("account publicKey: ", wallet.account?.publicKey);
+    }, [wallet.connected]);
+
     return (
         <HeaderContainer>
             <Logo>Cocktail.Fi</Logo>
             <SearchBar placeholder="Search for anything..." />
             <ButtonGroup>
-                <Button>SUI Network</Button>
-                <Button>Connect wallet</Button>
+                <NetworkButton>SUI Network</NetworkButton>
+                <CustomConnectButton />
             </ButtonGroup>
         </HeaderContainer>
     );
