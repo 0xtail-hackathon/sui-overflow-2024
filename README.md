@@ -46,5 +46,4 @@ Smart contracts can be found in `contracts` folder.
 
 Contracts are deployed on Sui testnet.
 
-
-<img width="1442" alt="스크린샷 2024-05-25 오후 6 10 53" src="https://github.com/0xtail-hackathon/sui-overflow-2024/assets/13637977/2f647d0c-483b-4e5e-9519-50fbbc251eaa">
+<img width="1171" alt="스크린샷 2024-05-25 오후 6 23 16" src="https://github.com/0xtail-hackathon/sui-overflow-2024/assets/13637977/78518d85-96b7-4d2c-bbeb-bde0c758027e">
