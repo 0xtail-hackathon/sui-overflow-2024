@@ -100,8 +100,8 @@ const App: React.FC = () => {
                                     </Routes>
                                 </MainContent>
                             </Body>
-                            <Footer />
                         </Layout>
+                        <Footer />
                     </Router>
                 </WalletProvider>
             </QueryClientProvider>
