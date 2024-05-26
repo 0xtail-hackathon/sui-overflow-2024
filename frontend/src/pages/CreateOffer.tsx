@@ -50,7 +50,7 @@ const CreateFormContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    min-width: 480px;
+    width: 620px;
 `;
 
 const CreateFormBox = styled.div`
@@ -82,6 +82,7 @@ const Step = styled.div<{ active: boolean }>`
         active ? theme.colors.primary : theme.colors.gray};
     width: 100%;
     gap: 8px;
+    font-weight: ${({ active }) => (active ? "600" : "400")};
 `;
 
 const StepTitle = styled.div`

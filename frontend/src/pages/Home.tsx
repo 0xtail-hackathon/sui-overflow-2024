@@ -108,7 +108,7 @@ const Home: React.FC = () => {
     const navigate = useNavigate();
 
     const handleCreateOfferClick = () => {
-        navigate("/create-offer");
+        navigate("/offer/create");
     };
 
     useEffect(() => {

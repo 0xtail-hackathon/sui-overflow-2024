@@ -24,6 +24,7 @@ import Analytics from "@pages/Analytics";
 import Settings from "@pages/Settings";
 import styled from "styled-components";
 import CreateOffer from "./pages/CreateOffer";
+import NotFound from "./pages/NotFound"; // NotFound 컴포넌트를 임포트합니다.
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -98,10 +99,28 @@ const App: React.FC = () => {
                                             path="/settings"
                                             element={<Settings />}
                                         />
+                                        <Route path="/offer">
+                                            <Route
+                                                path="create"
+                                                element={<CreateOffer />}
+                                            />
+                                            <Route
+                                                path=":offerNumber"
+                                                element={
+                                                    <div>Offer Detail</div>
+                                                }
+                                            />
+                                            <Route
+                                                path=""
+                                                element={<NotFound />}
+                                            />
+                                            {/* 기본 경로를 404로 설정 */}
+                                        </Route>
                                         <Route
-                                            path="/create-offer"
-                                            element={<CreateOffer />}
+                                            path="*"
+                                            element={<NotFound />}
                                         />
+                                        {/* 전체 애플리케이션의 404 설정 */}
                                     </Routes>
                                 </MainContent>
                             </Body>
