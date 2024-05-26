@@ -17,6 +17,7 @@ const theme = {
     },
     shadows: {
         style1: "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;",
+        style2: "box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;",
     },
 };
 export type ThemeType = typeof theme;
