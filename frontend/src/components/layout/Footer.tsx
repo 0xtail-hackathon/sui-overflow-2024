@@ -87,7 +87,7 @@ const FooterBottom = styled.div`
     text-align: center;
     margin-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding-top: 10px;
+    padding-top: 20px;
     font-size: 0.9rem;
 `;
 
