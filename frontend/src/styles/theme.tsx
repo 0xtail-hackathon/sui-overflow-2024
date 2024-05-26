@@ -2,16 +2,21 @@ const theme = {
     colors: {
         primary: "#00B2FF",
         secondary: "#00b3ff1a",
+        white: "#FFFFFF",
         black: "#222222",
         gray: "#7D7B7B",
+        light_gray: "#F3F4F6",
+        splitter: "#D9D9D9",
+        search_bar_bg: "#F3F4F6",
+        bg: "#F5F8FF",
         header_bg: "#FFFFFF",
-        sidebar_bg: "#F7F7F7",
+        sidebar_bg: "#FFFFFF",
     },
     fonts: {
         primary: "Arial, sans-serif",
     },
     shadows: {
-        style1: "box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;",
+        style1: "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;",
     },
 };
 export type ThemeType = typeof theme;
