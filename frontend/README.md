@@ -1,9 +1,7 @@
 
 # Cocktail Finance for Sui Overflow 2024
 Team: **0xtail**
-
 Project Name: Cocktail Finance
-
 Contributors:
 - Seokhun Yoon (@imysh578)
 - Doyoung Kim (@Do-youngKim)
@@ -28,7 +26,7 @@ Our Cocktail Finance provides a seamless platform for token transactions without
 - Transparent Deals: All offers are clearly listed, providing you with all the information needed to make informed decisions.
 
 ## Why Cocktail Finance?
-**Safety and Transparency**
+**Safety and Transparency** 
 
 All transactions are managed by **Sui contracts**, ensuring that every trade is conducted securely and transparently. You can trust that your transactions are protected by robust blockchain technology.
 
@@ -45,5 +43,3 @@ Smart contracts can be found in `contracts` folder.
 ### Sui
 
 Contracts are deployed on Sui testnet.
-
-<img width="1171" alt="스크린샷 2024-05-25 오후 6 23 16" src="https://github.com/0xtail-hackathon/sui-overflow-2024/assets/13637977/78518d85-96b7-4d2c-bbeb-bde0c758027e">
