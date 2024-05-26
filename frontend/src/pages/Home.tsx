@@ -6,6 +6,7 @@ import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import OfferCard from "@components/common/OfferCard";
 import { todayYYYYMMDD } from "@/utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const HomeContainer = styled.div`
     display: flex;
@@ -103,7 +104,12 @@ const OffersSection = styled.div`
 `;
 
 const Home: React.FC = () => {
-    const [today, setToday] = useState("");
+    const [today, setToday] = useState("YYYY.MM.DD");
+    const navigate = useNavigate();
+
+    const handleCreateOfferClick = () => {
+        navigate("/create-offer");
+    };
 
     useEffect(() => {
         setToday(todayYYYYMMDD());
@@ -128,7 +134,9 @@ const Home: React.FC = () => {
                         <br />
                         Create a new offer!
                     </OfferText>
-                    <OfferButton>+ Create an offer</OfferButton>
+                    <OfferButton onClick={handleCreateOfferClick}>
+                        + Create an offer
+                    </OfferButton>
                 </OfferButtonContainer>
             </HeaderSection>
             <OffersSection>

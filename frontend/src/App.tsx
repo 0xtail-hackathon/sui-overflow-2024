@@ -23,6 +23,7 @@ import OTCMarket from "@pages/OTCMarket";
 import Analytics from "@pages/Analytics";
 import Settings from "@pages/Settings";
 import styled from "styled-components";
+import CreateOffer from "./pages/CreateOffer";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -96,6 +97,10 @@ const App: React.FC = () => {
                                         <Route
                                             path="/settings"
                                             element={<Settings />}
+                                        />
+                                        <Route
+                                            path="/create-offer"
+                                            element={<CreateOffer />}
                                         />
                                     </Routes>
                                 </MainContent>
