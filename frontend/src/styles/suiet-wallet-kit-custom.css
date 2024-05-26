@@ -1,0 +1,16 @@
+:root {
+    --wkit-accent-hs: 210, 100%;
+    --wkit-on-accent-rgb: 255, 255, 255;
+    --wkit-bg-rgb: 239, 241, 245;
+    --wkit-on-bg-rgb: 10, 14, 34;
+    --wkit-font-family: 'Inter', sans-serif;
+    --wkit-font-family-mono: 'IBM Plex Mono', monospace;
+    --wkit-font-size-large: 1rem;
+    --wkit-font-size-medium: 1rem;
+    --wkit-font-size-small: 1rem;
+    --wkit-line-height-large: 1rem;
+    --wkit-line-height-medium: 1rem;
+    --wkit-line-height-small: 1rem;
+    --wkit-button-width: 100%;
+    --wkit-border-radius: 16px;
+}
