@@ -4,10 +4,8 @@ import { addressEllipsis, ConnectButton, useWallet } from "@suiet/wallet-kit";
 import "@suiet/wallet-kit/style.css";
 
 function createMintNftTxnBlock() {
-    // define a programmable transaction block
     const txb = new TransactionBlock();
 
-    // note that this is a testnet contract address
     const contractAddress = "0x3c2c4f8f78d63dc3a7600caf7a35cbecec233ef78eae2c4c0803eb23b8a2a17e";
     const contractModule = "my_hero";
     const contractMethod = "mint";
@@ -31,24 +29,52 @@ function createMintNftTxnBlock() {
 
 const PointMarket: React.FC = () => {
     const wallet = useWallet();
-    const [mintResult, setMintResult] = useState<any>(null); // State to store minting result
+    const [mintResult, setMintResult] = useState<any>(null);
+    const [userAssets, setUserAssets] = useState<any>(null);
+    const [selectedAssetIndex, setSelectedAssetIndex] = useState<number | null>(null);
 
     async function mintNft() {
         if (!wallet.connected) return;
 
         const txb = createMintNftTxnBlock();
         try {
-            // call the wallet to sign and execute the transaction
             const res = await wallet.signAndExecuteTransactionBlock({
                 transactionBlock: txb
             });
             console.log("nft minted successfully!", res);
             alert("Congrats! your nft is minted!");
-            setMintResult(res); // Set minting result to state
+            setMintResult(res);
         } catch (e) {
             alert("Oops, nft minting failed");
             console.error("nft mint failed", e);
         }
+    }
+
+    function getUserAssets(owner: string) {
+        fetch('https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'suix_getAllBalances',
+                params: [owner]
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setUserAssets(data.result);
+            })
+            .catch(error => {
+                console.error('There was a problem with your fetch operation:', error);
+            });
     }
 
     return (
@@ -80,6 +106,29 @@ const PointMarket: React.FC = () => {
                             <span className="gradient">Current chain of wallet: </span>
                             {wallet.chain?.name}
                         </p>
+                        <button onClick={() => getUserAssets(wallet.account.address)}> Get Assets </button>
+
+                        {userAssets && (
+                            <div>
+                                <select
+                                    onChange={(e) => setSelectedAssetIndex(Number(e.target.value))}
+                                    value={selectedAssetIndex !== null ? selectedAssetIndex : ''}
+                                >
+                                    <option value="" disabled>Select an asset</option>
+                                    {userAssets.map((asset: any, index: number) => (
+                                        <option key={index} value={index}>
+                                            {asset.coinType} - {asset.totalBalance}
+                                        </option>
+                                    ))}
+                                </select>
+                                {/*{selectedAssetIndex !== null && (*/}
+                                {/*    <div>*/}
+                                {/*        <h3>Selected Asset Details</h3>*/}
+                                {/*        <pre>{JSON.stringify(userAssets[selectedAssetIndex], null, 2)}</pre>*/}
+                                {/*    </div>*/}
+                                {/*)}*/}
+                            </div>
+                        )}
 
                         <button onClick={mintNft}> Mint Your NFT !</button>
                         {mintResult && (
@@ -99,6 +148,7 @@ const PointMarket: React.FC = () => {
 };
 
 export default PointMarket;
+
 
 /*
 참고용: 배포한 contract 내용(0x3c2c4f8f78d63dc3a7600caf7a35cbecec233ef78eae2c4c0803eb23b8a2a17e)
