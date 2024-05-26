@@ -3,7 +3,6 @@
 
 // Modified from https://github.com/MystenLabs/sui/blob/main/sui_programmability/examples/nfts/sources/marketplace.move
 
-// https://suiscan.xyz/devnet/object/0xcfb9585afb821567a4453d7e5566c0a9f74a14f7ede79640ad3900b28b385389/contracts
 
 module marketplace::marketplace {
     use sui::dynamic_object_field as ofield;
