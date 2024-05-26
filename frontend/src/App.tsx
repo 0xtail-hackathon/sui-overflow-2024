@@ -12,7 +12,7 @@ import {
     GlassWallet,
     SuietWallet,
     SuiWallet,
-    WalletProvider
+    WalletProvider,
 } from "@suiet/wallet-kit";
 import Header from "@components/layout/Header";
 import Footer from "@components/layout/Footer";
@@ -39,12 +39,23 @@ const queryClient = new QueryClient({
 const Layout = styled.div`
     display: flex;
     flex-direction: column;
+    gap: 20px;
+    width: 100%;
     height: 100vh;
+    padding: 30px;
+    background-color: ${({ theme }) => theme.colors.bg};
 `;
 
 const Body = styled.div`
     display: flex;
     flex: 1;
+    gap: 20px;
+    width: 100%;
+`;
+
+const MainContent = styled.main`
+    flex: 1;
+    overflow-y: auto;
 `;
 
 const App: React.FC = () => {
@@ -52,41 +63,45 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <GlobalStyle />
-                <WalletProvider defaultWallets={[
-                    SuietWallet,
-                    SuiWallet,
-                    EthosWallet,
-                    ElliWallet,
-                    FrontierWallet,
-                    GlassWallet
-                ]}>
+                <WalletProvider
+                    defaultWallets={[
+                        SuietWallet,
+                        SuiWallet,
+                        EthosWallet,
+                        ElliWallet,
+                        FrontierWallet,
+                        GlassWallet,
+                    ]}
+                >
                     <Router>
                         <Layout>
                             <Header />
                             <Body>
                                 <Sidebar />
-                                <Routes>
-                                    <Route path="/" element={<Home />} />
-                                    <Route
-                                        path="/point-market"
-                                        element={<PointMarket />}
-                                    />
-                                    <Route
-                                        path="/otc-market"
-                                        element={<OTCMarket />}
-                                    />
-                                    <Route
-                                        path="/analytics"
-                                        element={<Analytics />}
-                                    />
-                                    <Route
-                                        path="/settings"
-                                        element={<Settings />}
-                                    />
-                                </Routes>
+                                <MainContent>
+                                    <Routes>
+                                        <Route path="/" element={<Home />} />
+                                        <Route
+                                            path="/point-market"
+                                            element={<PointMarket />}
+                                        />
+                                        <Route
+                                            path="/otc-market"
+                                            element={<OTCMarket />}
+                                        />
+                                        <Route
+                                            path="/analytics"
+                                            element={<Analytics />}
+                                        />
+                                        <Route
+                                            path="/settings"
+                                            element={<Settings />}
+                                        />
+                                    </Routes>
+                                </MainContent>
                             </Body>
-                            <Footer />
                         </Layout>
+                        <Footer />
                     </Router>
                 </WalletProvider>
             </QueryClientProvider>

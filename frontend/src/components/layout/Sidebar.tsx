@@ -13,8 +13,7 @@ import SettingsIcon from "@assets/images/icon-settings.svg?react";
 const SidebarContainer = styled.aside`
     width: 250px;
     background-color: ${({ theme }) => theme.colors.sidebar_bg};
-    padding: 1.5rem;
-    margin: 30px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: ${({ theme }) => theme.shadows.style1};
 `;
@@ -49,7 +48,7 @@ const MenuItem = styled.li`
             color: ${({ theme }) => theme.colors.primary};
             border-radius: 4px;
 
-            svg {
+            > svg {
                 fill: ${({ theme }) => theme.colors.primary};
             }
         }
@@ -58,14 +57,14 @@ const MenuItem = styled.li`
 
 const MenuSplitter = styled.hr`
     border: 0;
-    border-top: 1px solid ${({ theme }) => theme.colors.gray};
+    border-top: 1px solid ${({ theme }) => theme.colors.splitter};
     margin: 10px 0;
 `;
 
 const MenuItemIcon = styled.span`
     margin-right: 10px;
 
-    svg {
+    > svg {
         width: 24px;
         height: 24px;
         fill: currentColor; // SVG의 fill 속성을 현재 색상으로 설정
