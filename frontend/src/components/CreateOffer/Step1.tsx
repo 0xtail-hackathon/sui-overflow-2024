@@ -39,6 +39,11 @@ const NetworkOption = styled.div`
 	${Dropdown}:hover & {
 		border: 1px solid ${({ theme }) => theme.colors.primary};
 	}
+
+	> svg {
+		width: 24px;
+		height: 24px;
+	}
 `;
 
 const ArrowDown = styled(ArrowDownICon)`
@@ -87,6 +92,11 @@ const DropdownContent = styled.div`
 			background-color: ${({ theme }) => theme.colors.primary};
 			color: ${({ theme }) => theme.colors.white};
 			border-radius: 8px;
+		}
+
+		svg {
+			width: 24px;
+			height: 24px;
 		}
 	}
 `;

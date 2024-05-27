@@ -1,5 +1,5 @@
 // src/components/CreateOffer/Step2.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
@@ -7,6 +7,7 @@ import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import ArrowDownICon from "@assets/images/icon-arrow-down.svg?react";
 import { useOfferStore } from "@stores/useOfferStore";
 import { capitalizeFirstLetter } from "@/utils/helpers";
+import useDebounce from "@/hooks/useDebounce";
 
 const FormField = styled.div`
 	margin-bottom: 20px;
@@ -57,6 +58,10 @@ const TokenField = styled.div`
 	}
 `;
 
+const SuiTokenImage = styled(SuiLogo)`
+	padding: 6px;
+`;
+
 const Dropdown = styled.div`
 	position: relative;
 	display: inline-block;
@@ -75,9 +80,9 @@ const TokenOption = styled.div`
 	border-radius: 8px;
 	background-color: ${({ theme }) => theme.colors.white};
 
-	> svg {
-		width: 30px;
-		height: 30px;
+	svg {
+		width: 40px;
+		height: 40px;
 	}
 
 	&:hover {
@@ -150,7 +155,32 @@ const DropdownContent = styled.div`
 `;
 
 const Step2: React.FC = () => {
-	const { offerType, offerToken, setOfferToken } = useOfferStore();
+	const { offerType, offerToken, suiToken, description, setOfferToken, setSuiToken, setDescription } = useOfferStore();
+	const [offerTokenAmount, setOfferTokenAmount] = useState(offerToken.amount);
+	const [suiTokenAmount, setSuiTokenAmount] = useState(suiToken.amount);
+	const [localDescription, setLocalDescription] = useState(description);
+
+	const debouncedOfferTokenAmount = useDebounce(offerTokenAmount, 500);
+	const debouncedSuiTokenAmount = useDebounce(suiTokenAmount, 500);
+	const debouncedDescription = useDebounce(localDescription, 500);
+
+	useEffect(() => {
+		setOfferToken({
+			...offerToken,
+			amount: debouncedOfferTokenAmount,
+		});
+	}, [debouncedOfferTokenAmount]);
+
+	useEffect(() => {
+		setSuiToken({
+			...suiToken,
+			amount: debouncedSuiTokenAmount,
+		});
+	}, [debouncedSuiTokenAmount]);
+
+	useEffect(() => {
+		setDescription(debouncedDescription);
+	}, [debouncedDescription]);
 
 	return (
 		<>
@@ -160,7 +190,13 @@ const Step2: React.FC = () => {
 					{offerType === "buying" ? "buy" : "sell"})
 				</label>
 				<TokenField>
-					<input type="text" placeholder="Enter Amount" pattern="[0-9]+([.][0-9]+)?" />
+					<input
+						type="text"
+						placeholder="Enter Amount"
+						pattern="[0-9]+([.][0-9]+)?"
+						value={offerTokenAmount}
+						onChange={(e) => setOfferTokenAmount(e.target.value)}
+					/>
 					<Dropdown>
 						<TokenOption>
 							{offerToken.name === "Scallop" && <ScallopLogo />}
@@ -196,16 +232,27 @@ const Step2: React.FC = () => {
 			<FormField>
 				<label> SUI Token (The amount of token you will {offerType === "buying" ? "send" : "receive"})</label>
 				<TokenField>
-					<input type="text" placeholder="Enter Amount" pattern="[0-9]+([.][0-9]+)?" />
+					<input
+						type="text"
+						placeholder="Enter Amount"
+						pattern="[0-9]+([.][0-9]+)?"
+						value={suiTokenAmount}
+						onChange={(e) => setSuiTokenAmount(e.target.value)}
+					/>
 					<TokenOption className="sui-token">
-						<SuiLogo />
+						<SuiTokenImage />
 						SUI
 					</TokenOption>
 				</TokenField>
 			</FormField>
 			<FormField>
 				<label>Description (Optional)</label>
-				<textarea placeholder="Write your description" maxLength={180} />
+				<textarea
+					placeholder="Write your description"
+					maxLength={180}
+					value={localDescription}
+					onChange={(e) => setLocalDescription(e.target.value)}
+				/>
 			</FormField>
 		</>
 	);

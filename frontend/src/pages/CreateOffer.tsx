@@ -8,6 +8,11 @@ import Step2 from "@components/CreateOffer/Step2";
 import Step3 from "@components/CreateOffer/Step3";
 import { useOfferStore } from "@stores/useOfferStore";
 import theme from "@/styles/theme";
+import OfferCard from "@/components/common/OfferCard";
+import CetusLogo from "@assets/images/logo-cetus.svg?react";
+import ScallopLogo from "@assets/images/logo-scallop.svg?react";
+import { useWallet } from "@suiet/wallet-kit";
+import { commaInNumbers } from "@/utils/helpers";
 
 const CreateOfferContainer = styled.div`
 	position: relative;
@@ -42,11 +47,12 @@ const BackToHomeButton = styled(ArrowLeftIcon)`
 	fill: ${({ theme }) => theme.colors.gray};
 `;
 
-const CreateFormContainer = styled.div`
+const ContentContainer = styled.div`
 	position: absolute;
 	top: 120px;
 	left: 50%;
 	transform: translate(-50%, 0);
+	align-items: center;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -135,9 +141,12 @@ const FormSection = styled.div`
 `;
 
 const ButtonGroup = styled.div`
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 	justify-content: space-between;
 	gap: 20px;
+	width: 100%;
+	padding: 0 8px;
 `;
 
 const Button = styled.button<{ $primary?: boolean }>`
@@ -148,7 +157,7 @@ const Button = styled.button<{ $primary?: boolean }>`
 	background: ${({ $primary }) => ($primary ? "linear-gradient(90deg, #00b3ff 0%, #1f93ff 100%);" : theme.colors.gray)};
 	color: white;
 	font-size: 1rem;
-	width: 100%;
+	min-width: 160px;
 
 	&:hover {
 		color: ${({ theme }) => theme.colors.black};
@@ -160,16 +169,17 @@ const Button = styled.button<{ $primary?: boolean }>`
 const CreateOffer: React.FC = () => {
 	const [step, setStep] = useState(1);
 	const navigate = useNavigate();
-	const { network, offerType, setNetwork, setOfferType } = useOfferStore();
+	const offerInfo = useOfferStore();
+	const wallet = useWallet();
 
 	useEffect(() => {
-		setNetwork("SUI");
-		setOfferType("selling");
+		offerInfo.setNetwork("SUI");
+		offerInfo.setOfferType("selling");
 	}, []);
 
 	useEffect(() => {
-		console.log(`[step ${step}] network: ${network}, offerType: ${offerType}`);
-	}, [network, offerType, step]);
+		console.log(`[step ${step}] ${JSON.stringify(offerInfo)}`);
+	}, [offerInfo.description, offerInfo.network, offerInfo.offerToken, offerInfo.offerType, offerInfo.suiToken]);
 
 	const handleNext = () => {
 		if (step < 3) setStep(step + 1);
@@ -180,61 +190,90 @@ const CreateOffer: React.FC = () => {
 		if (step === 1) navigate(-1);
 	};
 
-	const handleGoHome = () => {
-		navigate("/");
-	};
-
 	const handleSubmit = () => {
 		// TODO: Submit the form
+		offerInfo.setOfferNumber(123456);
+		setStep(4);
+	};
+
+	const handleGoToHome = () => {
 		navigate("/");
 	};
 
+	if (step < 4)
+		return (
+			<CreateOfferContainer>
+				<TitleBox>
+					<BackToHomeButton onClick={handleBack} />
+					<h2>Create Offer in OTC Market</h2>
+					<span>(Step {step} of 3)</span>
+				</TitleBox>
+				<ContentContainer>
+					<CreateFormBox>
+						<StepIndicator>
+							<Step $active={step === 1}>
+								<StepTitle>Network & Type</StepTitle>
+								<StepNumber $active={step === 1}>1</StepNumber>
+							</Step>
+							<StepArrow />
+							<Step $active={step === 2}>
+								<StepTitle>Detail</StepTitle>
+								<StepNumber $active={step === 2}>2</StepNumber>
+							</Step>
+							<StepArrow />
+							<Step $active={step === 3}>
+								<StepTitle>Review & Create</StepTitle>
+								<StepNumber $active={step === 3}>3</StepNumber>
+							</Step>
+						</StepIndicator>
+						<Divider />
+						<FormSection>
+							{step === 1 && <Step1 />}
+							{step === 2 && <Step2 />}
+							{step === 3 && <Step3 />}
+						</FormSection>
+					</CreateFormBox>
+					<ButtonGroup>
+						<Button onClick={handleBack}>Back</Button>
+						{step < 3 && (
+							<Button $primary onClick={handleNext}>
+								Next
+							</Button>
+						)}
+						{step === 3 && (
+							<Button $primary onClick={handleSubmit}>
+								Create Offer
+							</Button>
+						)}
+					</ButtonGroup>
+				</ContentContainer>
+			</CreateOfferContainer>
+		);
+
+	// Step 4 - Success page
 	return (
 		<CreateOfferContainer>
 			<TitleBox>
-				<BackToHomeButton onClick={handleGoHome} />
+				<BackToHomeButton onClick={handleBack} />
 				<h2>Create Offer in OTC Market</h2>
-				<span>(Step {step} of 3)</span>
 			</TitleBox>
-			<CreateFormContainer>
-				<CreateFormBox>
-					<StepIndicator>
-						<Step $active={step === 1}>
-							<StepTitle>Network & Type</StepTitle>
-							<StepNumber $active={step === 1}>1</StepNumber>
-						</Step>
-						<StepArrow />
-						<Step $active={step === 2}>
-							<StepTitle>Detail</StepTitle>
-							<StepNumber $active={step === 2}>2</StepNumber>
-						</Step>
-						<StepArrow />
-						<Step $active={step === 3}>
-							<StepTitle>Review & Create</StepTitle>
-							<StepNumber $active={step === 3}>3</StepNumber>
-						</Step>
-					</StepIndicator>
-					<Divider />
-					<FormSection>
-						{step === 1 && <Step1 />}
-						{step === 2 && <Step2 />}
-						{step === 3 && <Step3 />}
-					</FormSection>
-				</CreateFormBox>
-				<ButtonGroup>
-					<Button onClick={handleBack}>Back</Button>
-					{step < 3 && (
-						<Button $primary onClick={handleNext}>
-							Next
-						</Button>
-					)}
-					{step === 3 && (
-						<Button $primary onClick={handleSubmit}>
-							Create Offer
-						</Button>
-					)}
-				</ButtonGroup>
-			</CreateFormContainer>
+			<ContentContainer>
+				<OfferCard
+					logo={offerInfo.offerToken.name === "Scallop" ? <ScallopLogo /> : <CetusLogo />}
+					offerNumber={offerInfo.offerNumber || 0}
+					tokenName={offerInfo.offerToken.name}
+					offerAccountAddress={wallet.account?.address || ""}
+					tokenAmount={offerInfo.offerToken.amount}
+					suiAmount={offerInfo.suiToken.amount}
+				/>
+				<span>
+					Your offer has been created successfully. <br /> Offer number is #{commaInNumbers(offerInfo.offerNumber || 0)}
+					.
+				</span>
+				<Button $primary onClick={handleGoToHome}>
+					Okay
+				</Button>
+			</ContentContainer>
 		</CreateOfferContainer>
 	);
 };

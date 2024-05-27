@@ -50,6 +50,7 @@ const GlobalStyle = createGlobalStyle`
       align-items: center !important;
       color: ${({ theme }) => theme.colors.black} !important;
       background-color: ${({ theme }) => theme.colors.secondary} !important;
+      padding: 0 10px !important;
 
       &:hover {
           background-color: ${({ theme }) => theme.colors.primary} !important;
@@ -115,8 +116,7 @@ const GlobalStyle = createGlobalStyle`
           font-weight: inherit !important;
 
           &:hover {
-              background-color: ${({ theme }) =>
-                  theme.colors.primary} !important;
+              background-color: ${({ theme }) => theme.colors.primary} !important;
               color: ${({ theme }) => theme.colors.white} !important;
           }
       }
