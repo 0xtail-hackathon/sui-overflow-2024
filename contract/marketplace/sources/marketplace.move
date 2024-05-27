@@ -20,6 +20,7 @@ module marketplace::marketplace {
     /// For when someone tries to delist without ownership.
     const ENotOwner: u64 = 1;
     const EFeeNotEnough: u64 = 2;
+    const ETokenPriceLow: u64 = 3;
 
     /// A shared `Marketplace`. Can be created by anyone using the
     /// `create` function. One instance of `Marketplace` accepts
@@ -27,7 +28,7 @@ module marketplace::marketplace {
     public struct Marketplace<phantom COIN> has key {
         id: UID,
         owner: address,
-        fee: u64,
+        fee_ratio: u64,
         items: Bag,
         payments: Table<address, Coin<COIN>>
     }
@@ -36,13 +37,12 @@ module marketplace::marketplace {
     /// price in [`Coin<COIN>`].
     public struct Listing has key, store {
         id: UID,
-        src_amount: u64,
         src_price: u64,
         owner: address,
     }
 
     /// Create a new shared Marketplace.
-    public fun create<COIN>(fee: u64, ctx: &mut TxContext) {
+    public fun create<COIN>(fee_ratio: u64, ctx: &mut TxContext) {
         let id = object::new(ctx);
         let items = bag::new(ctx);
         let payments = table::new<address, Coin<COIN>>(ctx);
@@ -50,7 +50,7 @@ module marketplace::marketplace {
         transfer::share_object(Marketplace<COIN> {
             id,
             owner,
-            fee,
+            fee_ratio,
             items,
             payments
         })
@@ -59,14 +59,16 @@ module marketplace::marketplace {
     fun deduct_fee<COIN>(
         marketplace: &mut Marketplace<COIN>,
         fee: &mut Coin<SUI>,
+        src_price: u64,
         ctx: &mut TxContext
     ) {
+        assert!(src_price >= 10_000_000, EFeeNotEnough);
+        let market_fee = src_price * marketplace.fee_ratio / 100;
+        assert!(market_fee <= coin::value(fee), EFeeNotEnough);
 
-        assert!(marketplace.fee <= coin::value(fee), EFeeNotEnough);
-
-        let remaining_amount: u64 = coin::value(fee) - marketplace.fee;
+        let remaining_amount: u64 = coin::value(fee) - market_fee;
         let remaining_coin = coin::split(fee, remaining_amount, ctx);
-        let fee_coin = coin::split(fee, marketplace.fee, ctx);
+        let fee_coin = coin::split(fee, market_fee, ctx);
 
         coin::join(fee, remaining_coin);
         transfer::public_transfer(fee_coin, marketplace.owner);
@@ -76,16 +78,14 @@ module marketplace::marketplace {
     public fun list<T: key + store, COIN>(
         marketplace: &mut Marketplace<COIN>,
         item: T,
-        src_amount: u64,
         src_price: u64,
         fee: &mut Coin<SUI>,
         ctx: &mut TxContext
     ) {
-        deduct_fee(marketplace, fee, ctx);
+        deduct_fee(marketplace, fee, src_price, ctx);
         let item_id = object::id(&item);
         let owner = tx_context::sender(ctx);
         let mut listing = Listing {
-            src_amount,
             src_price,
             id: object::new(ctx),
             owner
@@ -105,7 +105,6 @@ module marketplace::marketplace {
             mut id,
             owner,
             src_price: _,
-            src_amount: _
         } = bag::remove(&mut marketplace.items, item_id);
 
         assert!(tx_context::sender(ctx) == owner, ENotOwner);
@@ -131,27 +130,25 @@ module marketplace::marketplace {
     fun buy<T: key + store, COIN>(
         marketplace: &mut Marketplace<COIN>,
         item_id: ID,
-        paid: Coin<COIN>,
+        paid: &mut Coin<COIN>,
+        fee: &mut Coin<SUI>,
+        ctx: &mut TxContext
     ): T {
         let Listing {
             mut id,
             owner,
             src_price ,
-            src_amount: _,
         } = bag::remove(&mut marketplace.items, item_id);
 
-        assert!(src_price == coin::value(&paid), EAmountIncorrect);
+        deduct_fee(marketplace, fee, src_price, ctx);
+        assert!(src_price <= coin::value(paid), EAmountIncorrect);
 
-        // Check if there's already a Coin hanging and merge `paid` with it.
-        // Otherwise attach `paid` to the `Marketplace` under owner's `address`.
-        if (table::contains<address, Coin<COIN>>(&marketplace.payments, owner)) {
-            coin::join(
-                table::borrow_mut<address, Coin<COIN>>(&mut marketplace.payments, owner),
-                paid
-            )
-        } else {
-            table::add(&mut marketplace.payments, owner, paid)
-        };
+        let change_amount: u64 = coin::value(paid) - src_price;
+        let change_coin = coin::split(paid, change_amount, ctx);
+        let paid_coin = coin::split(paid, src_price, ctx);
+
+        coin::join(paid, change_coin);
+        transfer::public_transfer(paid_coin, owner);
 
         let item = ofield::remove(&mut id, true);
         object::delete(id);
@@ -162,13 +159,12 @@ module marketplace::marketplace {
     public fun buy_and_take<T: key + store, COIN>(
         marketplace: &mut Marketplace<COIN>,
         item_id: ID,
-        paid: Coin<COIN>,
+        paid: &mut Coin<COIN>,
         fee: &mut Coin<SUI>,
         ctx: &mut TxContext
     ) {
-        deduct_fee(marketplace, fee, ctx);
         transfer::public_transfer(
-            buy<T, COIN>(marketplace, item_id, paid),
+            buy<T, COIN>(marketplace, item_id, paid, fee, ctx),
             tx_context::sender(ctx)
         )
     }
