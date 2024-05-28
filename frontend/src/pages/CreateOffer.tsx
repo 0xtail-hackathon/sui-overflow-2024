@@ -6,13 +6,12 @@ import ArrowLeftIcon from "@assets/images/icon-arrow-left.svg?react";
 import Step1 from "@components/CreateOffer/Step1";
 import Step2 from "@components/CreateOffer/Step2";
 import Step3 from "@components/CreateOffer/Step3";
-import { useOfferStore } from "@stores/useOfferStore";
+import { useCreateOfferStore } from "@stores/useCreateOfferStore";
 import theme from "@/styles/theme";
 import OfferCard from "@/components/common/OfferCard";
-import CetusLogo from "@assets/images/logo-cetus.svg?react";
-import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import { useWallet } from "@suiet/wallet-kit";
 import { commaInNumbers } from "@/utils/helpers";
+import StyledLink from "@/components/common/StyledLink";
 
 const CreateOfferContainer = styled.div`
 	position: relative;
@@ -57,6 +56,18 @@ const ContentContainer = styled.div`
 	flex-direction: column;
 	gap: 20px;
 	width: 620px;
+
+	&.last-step {
+		gap: 40px;
+
+		> .text-box {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			align-items: center;
+			text-align: center;
+		}
+	}
 `;
 
 const CreateFormBox = styled.div`
@@ -169,7 +180,7 @@ const Button = styled.button<{ $primary?: boolean }>`
 const CreateOffer: React.FC = () => {
 	const [step, setStep] = useState(1);
 	const navigate = useNavigate();
-	const offerInfo = useOfferStore();
+	const offerInfo = useCreateOfferStore();
 	const wallet = useWallet();
 
 	useEffect(() => {
@@ -257,19 +268,26 @@ const CreateOffer: React.FC = () => {
 				<BackToHomeButton onClick={handleBack} />
 				<h2>Create Offer in OTC Market</h2>
 			</TitleBox>
-			<ContentContainer>
+			<ContentContainer className="last-step">
 				<OfferCard
-					logo={offerInfo.offerToken.name === "Scallop" ? <ScallopLogo /> : <CetusLogo />}
 					offerNumber={offerInfo.offerNumber || 0}
 					tokenName={offerInfo.offerToken.name}
 					offerAccountAddress={wallet.account?.address || ""}
 					tokenAmount={offerInfo.offerToken.amount}
 					suiAmount={offerInfo.suiToken.amount}
+					offerType={offerInfo.offerType}
+					network={offerInfo.network}
 				/>
-				<span>
-					Your offer has been created successfully. <br /> Offer number is #{commaInNumbers(offerInfo.offerNumber || 0)}
-					.
-				</span>
+				<div className="text-box">
+					<span>Your offer has been created successfully.</span>
+					<span>Offer number is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
+					<span>
+						Transaction link:{" "}
+						<StyledLink href={`https://suiscan.xyz/mainnet/tx/${offerInfo.offerNumber}`} target="_blank">
+							View on Explorer
+						</StyledLink>
+					</span>
+				</div>
 				<Button $primary onClick={handleGoToHome}>
 					Okay
 				</Button>

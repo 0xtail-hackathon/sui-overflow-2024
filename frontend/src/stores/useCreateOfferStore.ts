@@ -1,4 +1,4 @@
-// src/stores/useOfferStore.ts
+// src/stores/useCreateOfferStore.ts
 import { create } from "zustand";
 
 interface TokenInfo {
@@ -21,7 +21,7 @@ interface OfferState {
 	setDescription: (description: string) => void;
 }
 
-export const useOfferStore = create<OfferState>((set) => ({
+export const useCreateOfferStore = create<OfferState>((set) => ({
 	network: "SUI",
 	offerNumber: undefined,
 	offerType: "selling",

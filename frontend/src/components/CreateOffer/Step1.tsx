@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import ArrowDownICon from "@assets/images/icon-arrow-down.svg?react";
-import { useOfferStore } from "@stores/useOfferStore";
+import { useCreateOfferStore } from "@stores/useCreateOfferStore";
 
 const FormField = styled.div`
 	margin-bottom: 20px;
@@ -157,7 +157,7 @@ const RadioButton = styled.label<{ selected: boolean }>`
 `;
 
 const Step1: React.FC = () => {
-	const { network, offerType, setNetwork, setOfferType } = useOfferStore();
+	const { network, offerType, setNetwork, setOfferType } = useCreateOfferStore();
 
 	return (
 		<>

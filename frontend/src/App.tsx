@@ -45,7 +45,7 @@ const Layout = styled.div`
 	width: 100%;
 	height: 100vh;
 	padding: 30px;
-	background-color: ${({ theme }) => theme.colors.bg};
+	/* background-color: ${({ theme }) => theme.colors.bg}; */
 `;
 
 const Body = styled.div`
@@ -56,8 +56,8 @@ const Body = styled.div`
 `;
 
 const MainContent = styled.main`
-	flex: 1;
 	overflow-y: auto;
+	width: 100%;
 `;
 
 const App: React.FC = () => {

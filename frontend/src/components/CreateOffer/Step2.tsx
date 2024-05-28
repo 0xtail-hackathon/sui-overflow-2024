@@ -5,7 +5,7 @@ import SuiLogo from "@assets/images/logo-sui.svg?react";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import ArrowDownICon from "@assets/images/icon-arrow-down.svg?react";
-import { useOfferStore } from "@stores/useOfferStore";
+import { useCreateOfferStore } from "@stores/useCreateOfferStore";
 import { capitalizeFirstLetter } from "@/utils/helpers";
 import useDebounce from "@/hooks/useDebounce";
 
@@ -155,7 +155,8 @@ const DropdownContent = styled.div`
 `;
 
 const Step2: React.FC = () => {
-	const { offerType, offerToken, suiToken, description, setOfferToken, setSuiToken, setDescription } = useOfferStore();
+	const { offerType, offerToken, suiToken, description, setOfferToken, setSuiToken, setDescription } =
+		useCreateOfferStore();
 	const [offerTokenAmount, setOfferTokenAmount] = useState(offerToken.amount);
 	const [suiTokenAmount, setSuiTokenAmount] = useState(suiToken.amount);
 	const [localDescription, setLocalDescription] = useState(description);

@@ -1,7 +1,7 @@
 // src/components/CreateOffer/Step3.tsx
 import React from "react";
 import styled from "styled-components";
-import { useOfferStore } from "@stores/useOfferStore";
+import { useCreateOfferStore } from "@stores/useCreateOfferStore";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
@@ -110,7 +110,7 @@ const OfferDetail = styled.div`
 `;
 
 const Step3: React.FC = () => {
-	const { offerType, offerToken, suiToken, description } = useOfferStore();
+	const { offerType, offerToken, suiToken, description } = useCreateOfferStore();
 
 	return (
 		<ReviewContainer>

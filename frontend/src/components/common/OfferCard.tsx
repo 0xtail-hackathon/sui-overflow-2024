@@ -2,16 +2,20 @@
 import React from "react";
 import styled from "styled-components";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
+import CetusLogo from "@assets/images/logo-cetus.svg?react";
+import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import SwapIcon from "@assets/images/icon-swap.svg?react";
 import { commaInNumbers, elipsize, shortenAddress } from "@/utils/helpers";
 import { useNavigate } from "react-router-dom";
+import { useOfferDetailStore } from "@stores/useOfferDetailStore";
 
-const CardContainer = styled.div`
+const CardContainer = styled.div<{ width?: string; height?: string }>`
 	background-color: #ffffff;
 	border-radius: 8px;
 	box-shadow: ${({ theme }) => theme.shadows.style1};
-	width: 340px;
-	height: 220px;
+	min-width: ${({ width }) => width || "300px"}; // 수정
+	max-width: ${({ width }) => width || "400px"}; // 수정
+	height: ${({ height }) => height || "220px"}; // 수정
 	display: flex;
 	flex-direction: column;
 	padding: 20px;
@@ -122,15 +126,6 @@ const SwapIconImage = styled(SwapIcon)`
 	height: 36px;
 `;
 
-interface CardProps {
-	logo: React.ReactNode;
-	offerNumber: number;
-	tokenName: string;
-	offerAccountAddress: string;
-	tokenAmount: string;
-	suiAmount: string;
-}
-
 const OfferCard: React.FC<CardProps> = ({
 	logo,
 	offerNumber,
@@ -138,18 +133,44 @@ const OfferCard: React.FC<CardProps> = ({
 	offerAccountAddress,
 	tokenAmount,
 	suiAmount,
+	offerType, // 추가
+	network, // 추가
+	width, // 추가
+	height, // 추가
 }) => {
 	const navigate = useNavigate();
+	const setOfferDetail = useOfferDetailStore((state) => state.setOfferDetail);
 
 	const handleDetail = () => {
+		setOfferDetail({
+			network,
+			offerNumber,
+			offerType,
+			offerToken: {
+				name: tokenName,
+				amount: tokenAmount,
+			},
+			suiToken: {
+				name: "SUI",
+				amount: suiAmount,
+			},
+			description: "", // 필요에 따라 설명 추가
+		});
 		navigate(`/offer/${offerNumber}`);
 	};
 
 	return (
-		<CardContainer>
+		<CardContainer width={width} height={height}>
 			<CardHeader>
 				<CardLogoBox>
-					<TokenLogoImage>{logo}</TokenLogoImage>
+					{logo ? (
+						<TokenLogoImage>{logo}</TokenLogoImage>
+					) : (
+						<>
+							<TokenLogoImage>{tokenName === "Cetus" && <CetusLogo />}</TokenLogoImage>
+							<TokenLogoImage>{tokenName === "Scallop" && <ScallopLogo />}</TokenLogoImage>
+						</>
+					)}
 					<SuiLogoImage />
 				</CardLogoBox>
 				<CardHeaderTextBox>
@@ -161,14 +182,14 @@ const OfferCard: React.FC<CardProps> = ({
 			<Divider />
 			<CardContent>
 				<CardText>
-					<h3>{shortenAddress(offerAccountAddress)}</h3>
+					<h3>{offerType === "selling" ? `${shortenAddress(offerAccountAddress)}` : "Taker"}</h3>
 					<h1>
 						{elipsize(tokenAmount)} {tokenName}
 					</h1>
 				</CardText>
 				<SwapIconImage />
 				<CardText>
-					<h3>You</h3>
+					<h3>{offerType === "selling" ? "Taker" : `${shortenAddress(offerAccountAddress)}`}</h3>
 					<h1>{elipsize(suiAmount)} SUI</h1>
 				</CardText>
 			</CardContent>

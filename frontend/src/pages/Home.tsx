@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import LogoCocktailFinance from "@assets/images/logo-cocktail.svg?react";
-import ScallopLogo from "@assets/images/logo-scallop.svg?react";
-import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import OfferCard from "@components/common/OfferCard";
 import { todayYYYYMMDD } from "@/utils/helpers";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +10,7 @@ const HomeContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+	width: 100%;
 `;
 
 const HeaderSection = styled.div`
@@ -22,8 +21,7 @@ const HeaderSection = styled.div`
 	align-items: center;
 	gap: 20px;
 	border-radius: 8px;
-	height: 220px;
-	box-shadow: ${({ theme }) => theme.shadows.style1};
+	padding-top: 24px;
 `;
 
 const LogoContainer = styled.div`
@@ -98,14 +96,53 @@ const OfferButton = styled.button`
 `;
 
 const OffersSection = styled.div`
-	display: flex;
-	flex-wrap: wrap;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); // 개수 최대 4개
 	gap: 20px;
 `;
 
 const Home: React.FC = () => {
 	const [today, setToday] = useState("YYYY.MM.DD");
 	const navigate = useNavigate();
+	const offerCards: CardProps[] = [
+		{
+			tokenName: "Cetus",
+			tokenAmount: "100.0",
+			suiAmount: "32.3",
+			offerNumber: 3229,
+			offerAccountAddress: "0x1234567890abcdef1234567890abcdef12345678",
+			network: "SUI",
+			offerType: "selling",
+		},
+		{
+			tokenName: "Scallop",
+			tokenAmount: "300.0",
+			suiAmount: "100.0",
+			offerNumber: 3230,
+			offerAccountAddress: "0x1234567890abcdef1234567890abcdef12345678",
+			network: "SUI",
+			offerType: "buying",
+		},
+		{
+			tokenName: "Cetus",
+			tokenAmount: "100.0",
+			suiAmount: "35.0",
+			offerNumber: 3231,
+			offerAccountAddress: "0x1234567890abcdef1234567890abcdef12345678",
+			network: "SUI",
+			offerType: "buying",
+		},
+		{
+			tokenName: "Scallop",
+			tokenAmount: "400.0",
+			suiAmount: "150.0",
+			offerNumber: 3232,
+			offerAccountAddress: "0x1234567890abcdef1234567890abcdef12345678",
+			network: "SUI",
+			offerType: "selling",
+		},
+	];
 
 	const handleCreateOfferClick = () => {
 		navigate("/offer/create");
@@ -138,54 +175,18 @@ const Home: React.FC = () => {
 				</OfferButtonContainer>
 			</HeaderSection>
 			<OffersSection>
-				<OfferCard
-					logo={<ScallopLogo />}
-					offerNumber={3231}
-					offerAccountAddress="0x1234567890abcdef1234567890abcdef12345678"
-					tokenName="Scallop"
-					tokenAmount="100.0"
-					suiAmount="32.3"
-				/>
-				<OfferCard
-					logo={<CetusLogo />}
-					offerNumber={3230}
-					offerAccountAddress="0x1234567890abcdef1234567890abcdef12345678"
-					tokenName="Cetus"
-					tokenAmount="100.01234123"
-					suiAmount="32.3"
-				/>
-				<OfferCard
-					logo={<CetusLogo />}
-					offerNumber={3229}
-					offerAccountAddress="0x1234567890abcdef1234567890abcdef12345678"
-					tokenName="Cetus"
-					tokenAmount="100.0"
-					suiAmount="32.3"
-				/>
-				<OfferCard
-					logo={<CetusLogo />}
-					offerNumber={3229}
-					offerAccountAddress="0x1234567890abcdef1234567890abcdef12345678"
-					tokenName="Cetus"
-					tokenAmount="100.0"
-					suiAmount="32.3"
-				/>
-				<OfferCard
-					logo={<CetusLogo />}
-					offerNumber={3229}
-					offerAccountAddress="0x1234567890abcdef1234567890abcdef12345678"
-					tokenName="Cetus"
-					tokenAmount="100.0"
-					suiAmount="32.3"
-				/>
-				<OfferCard
-					logo={<CetusLogo />}
-					offerNumber={3229}
-					offerAccountAddress="0x1234567890abcdef1234567890abcdef12345678"
-					tokenName="Cetus"
-					tokenAmount="100.0"
-					suiAmount="32.3"
-				/>
+				{offerCards.map((offerCard) => (
+					<OfferCard
+						key={offerCard.offerNumber}
+						offerNumber={offerCard.offerNumber}
+						offerAccountAddress={offerCard.offerAccountAddress}
+						tokenName={offerCard.tokenName}
+						tokenAmount={offerCard.tokenAmount}
+						suiAmount={offerCard.suiAmount}
+						network={offerCard.network}
+						offerType={offerCard.offerType}
+					/>
+				))}
 				{/* Add more Card components as needed */}
 			</OffersSection>
 		</HomeContainer>
