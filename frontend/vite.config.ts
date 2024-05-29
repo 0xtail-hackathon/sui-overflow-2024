@@ -8,5 +8,5 @@ import svgr from "vite-plugin-svgr"; // for importing SVG files as React compone
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [react(), tsconfigPaths(), svgr()],
-	base: "/sui-overflow-2024/frontend/",
+	base: "/sui-overflow-2024/",
 });
