@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import "@suiet/wallet-kit/style.css";
@@ -146,14 +146,6 @@ const Header: React.FC = () => {
 	const handleGoToHome = () => {
 		navigate("/");
 	};
-
-	useEffect(() => {
-		if (!wallet.connected) return;
-		console.log("connected wallet name: ", wallet.name);
-		console.log("account address: ", wallet.account?.address);
-		console.log("account publicKey: ", wallet.account?.publicKey);
-		console.log("connected network: ", wallet.chain?.name);
-	}, [wallet.account?.address, wallet.account?.publicKey, wallet.chain?.name, wallet.connected, wallet.name]);
 
 	return (
 		<HeaderContainer>

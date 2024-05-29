@@ -1,5 +1,6 @@
 // src/stores/useCreateOfferStore.ts
 import { create } from "zustand";
+import { SuiSignAndExecuteTransactionBlockOutput } from "@mysten/wallet-standard";
 
 interface TokenInfo {
 	name: string;
@@ -13,12 +14,17 @@ interface OfferState {
 	offerToken: TokenInfo;
 	suiToken: TokenInfo;
 	description: string;
+	transactionResult?: SuiSignAndExecuteTransactionBlockOutput;
+	mintResult?: SuiSignAndExecuteTransactionBlockOutput;
 	setNetwork: (network: string) => void;
 	setOfferNumber: (offerNumber: number) => void;
 	setOfferType: (offerType: "selling" | "buying") => void;
 	setOfferToken: (offerToken: TokenInfo) => void;
 	setSuiToken: (suiToken: TokenInfo) => void;
 	setDescription: (description: string) => void;
+	setTransactionResult: (transactionResult: SuiSignAndExecuteTransactionBlockOutput) => void;
+	setMintResult: (mintResult: SuiSignAndExecuteTransactionBlockOutput) => void;
+	setOfferInitialValues: () => void;
 }
 
 export const useCreateOfferStore = create<OfferState>((set) => ({
@@ -34,10 +40,31 @@ export const useCreateOfferStore = create<OfferState>((set) => ({
 		amount: "0",
 	},
 	description: "",
+	transactionResult: undefined,
+	mintResult: undefined,
 	setNetwork: (network) => set({ network }),
 	setOfferNumber: (offerNumber) => set({ offerNumber }),
 	setOfferType: (offerType) => set({ offerType }),
 	setOfferToken: (offerToken) => set({ offerToken }),
 	setSuiToken: (suiToken) => set({ suiToken }),
 	setDescription: (description) => set({ description }),
+	setTransactionResult: (transactionResult) => set({ transactionResult }),
+	setMintResult: (mintResult) => set({ mintResult }),
+	setOfferInitialValues: () =>
+		set({
+			network: "SUI",
+			offerNumber: undefined,
+			offerType: "selling",
+			offerToken: {
+				name: "Scallop",
+				amount: "0",
+			},
+			suiToken: {
+				name: "SUI",
+				amount: "0",
+			},
+			description: "",
+			transactionResult: undefined,
+			mintResult: undefined,
+		}),
 }));

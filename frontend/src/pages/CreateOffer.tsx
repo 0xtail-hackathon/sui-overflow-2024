@@ -11,6 +11,7 @@ import theme from "@/styles/theme";
 import OfferCard from "@/components/common/OfferCard";
 import { useWallet } from "@suiet/wallet-kit";
 import { commaInNumbers } from "@/utils/helpers";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
 
 const CreateOfferContainer = styled.div`
 	position: relative;
@@ -181,6 +182,47 @@ const CreateOffer: React.FC = () => {
 	const offerInfo = useCreateOfferStore();
 	const wallet = useWallet();
 
+	function makeSellOffer(offerTokenAmount: number, suiTokenAmount: number) {
+		const txb = new TransactionBlock();
+
+		const contractAddress = "0xae636d4fcbc298aac86f42df99ad5bd7effc551991a53b71a2f588090d7117d3";
+		const contractModule = "marketplace";
+		const contractMethod = "list";
+
+		const marketId = "0x0a407538e81bbd606b88ac206a926472f5c0e14fd5c0f3af07861e7e4328543f";
+		const item = "0x0e14252abbdc7dad7c22da9395a52997110e328093ec414a432da8e7a613fa75";
+		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
+
+		const src_amount = offerTokenAmount;
+		const src_price = suiTokenAmount;
+		const fee = "0x0b48e3336ffbc177edd13df92d47d09dc5c720b1f7aae924c873c51a5c51e91d";
+
+		txb.moveCall({
+			target: `${contractAddress}::${contractModule}::${contractMethod}`,
+			typeArguments: [`0x2::coin::Coin<${itemContractAddress}::managed::MANAGED>`, "0x2::sui::SUI"],
+			arguments: [txb.object(marketId), txb.object(item), txb.pure(src_price), txb.object(fee)],
+		});
+		return txb;
+	}
+
+	async function sellOffer(offerTokenAmount: number, suiTokenAmount: number) {
+		const txb = makeSellOffer(offerTokenAmount, suiTokenAmount);
+		try {
+			console.log("Executing transaction block...");
+			console.log(txb);
+			const res = await wallet.signAndExecuteTransactionBlock({
+				transactionBlock: txb,
+			});
+			console.log("sell offer made successfully!", res);
+			alert("Congrats! sell offer is made!");
+			offerInfo.setTransactionResult(res); // Update the state with the transaction result
+			offerInfo.setMintResult(res);
+		} catch (e) {
+			alert("Oops, sell offer failed");
+			console.error("sell offer failed", e);
+		}
+	}
+
 	useEffect(() => {
 		if (!wallet.connected) {
 			navigate("/"); // 연결되지 않은 경우 홈 페이지로 리디렉션
@@ -189,8 +231,7 @@ const CreateOffer: React.FC = () => {
 
 	// 초기 설정
 	useEffect(() => {
-		offerInfo.setNetwork("SUI");
-		offerInfo.setOfferType("selling");
+		offerInfo.setOfferInitialValues();
 	}, []);
 
 	useEffect(() => {
@@ -206,9 +247,8 @@ const CreateOffer: React.FC = () => {
 		if (step === 1) navigate(-1);
 	};
 
-	const handleSubmit = () => {
-		// TODO: Submit the form
-		offerInfo.setOfferNumber(123456); // 실제 offerNumber 생성 로직으로 대체 필요
+	const handleCreateOffer = async () => {
+		await sellOffer(Number(offerInfo.offerToken.amount), Number(offerInfo.suiToken.amount));
 		setStep(4);
 	};
 
@@ -257,7 +297,7 @@ const CreateOffer: React.FC = () => {
 							</Button>
 						)}
 						{step === 3 && (
-							<Button $primary onClick={handleSubmit}>
+							<Button $primary onClick={handleCreateOffer}>
 								Create Offer
 							</Button>
 						)}
@@ -284,11 +324,11 @@ const CreateOffer: React.FC = () => {
 					network={offerInfo.network}
 				/>
 				<span>Your offer has been created successfully.</span>
-				<span>Offer number is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
+				<span>Item ID is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
 				<span>
 					Transaction link:{" "}
 					<StyledLink
-						href={`https://explorer.sui.io/tx/${offerInfo.offerNumber}`}
+						href={`https://explorer.sui.io/tx/${offerInfo.transactionResult?.digest || ""}`}
 						target="_blank"
 						rel="noopener noreferrer"
 					>

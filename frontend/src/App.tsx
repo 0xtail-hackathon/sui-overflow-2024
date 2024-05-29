@@ -26,6 +26,7 @@ import styled from "styled-components";
 import CreateOffer from "./pages/CreateOffer";
 import NotFound from "./pages/NotFound"; // NotFound 컴포넌트를 임포트합니다.
 import OfferDetail from "./pages/OfferDetail";
+import OfferSuccess from "./pages/OfferSuccess";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -81,6 +82,7 @@ const App: React.FC = () => {
 										<Route path="/settings" element={<Settings />} />
 										<Route path="/offer">
 											<Route path="create" element={<CreateOffer />} />
+											<Route path="success" element={<OfferSuccess />} />
 											<Route path=":offerNumber" element={<OfferDetail />} />
 											<Route path="" element={<NotFound />} />
 											{/* 기본 경로를 404로 설정 */}

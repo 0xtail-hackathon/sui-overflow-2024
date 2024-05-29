@@ -6,7 +6,6 @@ import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import { commaInNumbers } from "@/utils/helpers";
-import { useWallet } from "@suiet/wallet-kit";
 
 const ReviewContainer = styled.div`
 	display: flex;
@@ -112,7 +111,6 @@ const OfferDetail = styled.div`
 
 const Step3: React.FC = () => {
 	const { offerType, offerToken, suiToken, description } = useCreateOfferStore();
-	const wallet = useWallet();
 
 	return (
 		<ReviewContainer>
