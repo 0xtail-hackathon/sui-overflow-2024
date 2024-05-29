@@ -1,154 +1,148 @@
-import React, { useState } from "react";
-import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { addressEllipsis, ConnectButton, useWallet } from "@suiet/wallet-kit";
-import "@suiet/wallet-kit/style.css";
+// import React, { useState } from "react";
+// import { TransactionBlock } from "@mysten/sui.js/transactions";
+// import { addressEllipsis, ConnectButton, useWallet } from "@suiet/wallet-kit";
+// import "@suiet/wallet-kit/style.css";
 
-function createMintNftTxnBlock() {
-    const txb = new TransactionBlock();
+// function createMintNftTxnBlock() {
+// 	const txb = new TransactionBlock();
 
-    const contractAddress = "0x3c2c4f8f78d63dc3a7600caf7a35cbecec233ef78eae2c4c0803eb23b8a2a17e";
-    const contractModule = "my_hero";
-    const contractMethod = "mint";
+// 	const contractAddress = "0x3c2c4f8f78d63dc3a7600caf7a35cbecec233ef78eae2c4c0803eb23b8a2a17e";
+// 	const contractModule = "my_hero";
+// 	const contractMethod = "mint";
 
-    const nftName = "NFT";
-    const nftImgUrl = "https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4";
-    const nftDescription = "nft 240525";
-    const nftCreator = "Dara";
+// 	const nftName = "NFT";
+// 	const nftImgUrl =
+// 		"https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4";
+// 	const nftDescription = "nft 240525";
+// 	const nftCreator = "Dara";
 
-    txb.moveCall({
-        target: `${contractAddress}::${contractModule}::${contractMethod}`,
-        arguments: [
-            txb.pure(nftName),
-            txb.pure(nftImgUrl),
-            txb.pure(nftDescription),
-            txb.pure(nftCreator)
-        ]
-    });
-    return txb;
-}
+// 	txb.moveCall({
+// 		target: `${contractAddress}::${contractModule}::${contractMethod}`,
+// 		arguments: [txb.pure(nftName), txb.pure(nftImgUrl), txb.pure(nftDescription), txb.pure(nftCreator)],
+// 	});
+// 	return txb;
+// }
 
 const PointMarket: React.FC = () => {
-    const wallet = useWallet();
-    const [mintResult, setMintResult] = useState<any>(null);
-    const [userAssets, setUserAssets] = useState<any>(null);
-    const [selectedAssetIndex, setSelectedAssetIndex] = useState<number | null>(null);
+	return <></>;
+	// const wallet = useWallet();
+	// const [mintResult, setMintResult] = useState<any>(null);
+	// const [userAssets, setUserAssets] = useState<any>(null);
+	// const [selectedAssetIndex, setSelectedAssetIndex] = useState<number | null>(null);
 
-    async function mintNft() {
-        if (!wallet.connected) return;
+	// async function mintNft() {
+	// 	if (!wallet.connected) return;
 
-        const txb = createMintNftTxnBlock();
-        try {
-            const res = await wallet.signAndExecuteTransactionBlock({
-                transactionBlock: txb
-            });
-            console.log("nft minted successfully!", res);
-            alert("Congrats! your nft is minted!");
-            setMintResult(res);
-        } catch (e) {
-            alert("Oops, nft minting failed");
-            console.error("nft mint failed", e);
-        }
-    }
+	// 	const txb = createMintNftTxnBlock();
+	// 	try {
+	// 		const res = await wallet.signAndExecuteTransactionBlock({
+	// 			transactionBlock: txb,
+	// 		});
+	// 		console.log("nft minted successfully!", res);
+	// 		alert("Congrats! your nft is minted!");
+	// 		setMintResult(res);
+	// 	} catch (e) {
+	// 		alert("Oops, nft minting failed");
+	// 		console.error("nft mint failed", e);
+	// 	}
+	// }
 
-    function getUserAssets(owner: string) {
-        fetch('https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'suix_getAllBalances',
-                params: [owner]
-            })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setUserAssets(data.result);
-            })
-            .catch(error => {
-                console.error('There was a problem with your fetch operation:', error);
-            });
-    }
+	// function getUserAssets(owner: string) {
+	// 	fetch("https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT", {
+	// 		method: "POST",
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 		body: JSON.stringify({
+	// 			jsonrpc: "2.0",
+	// 			id: 1,
+	// 			method: "suix_getAllBalances",
+	// 			params: [owner],
+	// 		}),
+	// 	})
+	// 		.then((response) => {
+	// 			if (!response.ok) {
+	// 				throw new Error("Network response was not ok");
+	// 			}
+	// 			return response.json();
+	// 		})
+	// 		.then((data) => {
+	// 			setUserAssets(data.result);
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error("There was a problem with your fetch operation:", error);
+	// 		});
+	// }
 
-    return (
-        <div className="App">
-            <h1 className="title gradient">Hello, Suiet Wallet Kit</h1>
-            <ConnectButton />
+	// return (
+	// 	<div className="App">
+	// 		<h1 className="title gradient">Hello, Suiet Wallet Kit</h1>
+	// 		<ConnectButton />
 
-            <section>
-                <p>
-                    <span className="gradient">Wallet status:</span> {wallet.status}
-                </p>
-                {wallet.status === "connected" && (
-                    <>
-                        {wallet?.account && (
-                            <>
-                                <p>
-                                    <span className="gradient">Connected Account: </span>
-                                    {wallet.account.address}
-                                </p>
-                                <p>
-                                    <span className="gradient">
-                                        Connected Account (with ellipsis):{" "}
-                                    </span>
-                                    {addressEllipsis(wallet.account.address)}
-                                </p>
-                            </>
-                        )}
-                        <p>
-                            <span className="gradient">Current chain of wallet: </span>
-                            {wallet.chain?.name}
-                        </p>
-                        <button onClick={() => getUserAssets(wallet.account.address)}> Get Assets </button>
+	// 		<section>
+	// 			<p>
+	// 				<span className="gradient">Wallet status:</span> {wallet.status}
+	// 			</p>
+	// 			{wallet.status === "connected" && (
+	// 				<>
+	// 					{wallet?.account && (
+	// 						<>
+	// 							<p>
+	// 								<span className="gradient">Connected Account: </span>
+	// 								{wallet.account.address}
+	// 							</p>
+	// 							<p>
+	// 								<span className="gradient">Connected Account (with ellipsis): </span>
+	// 								{addressEllipsis(wallet.account.address)}
+	// 							</p>
+	// 						</>
+	// 					)}
+	// 					<p>
+	// 						<span className="gradient">Current chain of wallet: </span>
+	// 						{wallet.chain?.name}
+	// 					</p>
+	// 					<button onClick={() => getUserAssets(wallet.account.address)}> Get Assets </button>
 
-                        {userAssets && (
-                            <div>
-                                <select
-                                    onChange={(e) => setSelectedAssetIndex(Number(e.target.value))}
-                                    value={selectedAssetIndex !== null ? selectedAssetIndex : ''}
-                                >
-                                    <option value="" disabled>Select an asset</option>
-                                    {userAssets.map((asset: any, index: number) => (
-                                        <option key={index} value={index}>
-                                            {asset.coinType} - {asset.totalBalance}
-                                        </option>
-                                    ))}
-                                </select>
-                                {/*{selectedAssetIndex !== null && (*/}
-                                {/*    <div>*/}
-                                {/*        <h3>Selected Asset Details</h3>*/}
-                                {/*        <pre>{JSON.stringify(userAssets[selectedAssetIndex], null, 2)}</pre>*/}
-                                {/*    </div>*/}
-                                {/*)}*/}
-                            </div>
-                        )}
+	// 					{userAssets && (
+	// 						<div>
+	// 							<select
+	// 								onChange={(e) => setSelectedAssetIndex(Number(e.target.value))}
+	// 								value={selectedAssetIndex !== null ? selectedAssetIndex : ""}
+	// 							>
+	// 								<option value="" disabled>
+	// 									Select an asset
+	// 								</option>
+	// 								{userAssets.map((asset: any, index: number) => (
+	// 									<option key={index} value={index}>
+	// 										{asset.coinType} - {asset.totalBalance}
+	// 									</option>
+	// 								))}
+	// 							</select>
+	// 							{/*{selectedAssetIndex !== null && (*/}
+	// 							{/*    <div>*/}
+	// 							{/*        <h3>Selected Asset Details</h3>*/}
+	// 							{/*        <pre>{JSON.stringify(userAssets[selectedAssetIndex], null, 2)}</pre>*/}
+	// 							{/*    </div>*/}
+	// 							{/*)}*/}
+	// 						</div>
+	// 					)}
 
-                        <button onClick={mintNft}> Mint Your NFT !</button>
-                        {mintResult && (
-                            <div>
-                                <h2>Minting Result</h2>
-                                <pre>{JSON.stringify(mintResult, null, 2)}</pre>
-                                <a href={`https://suiscan.xyz/testnet/tx/${mintResult.digest}`}>
-                                    View Transaction from Scan
-                                </a>
-                            </div>
-                        )}
-                    </>
-                )}
-            </section>
-        </div>
-    );
+	// 					<button onClick={mintNft}> Mint Your NFT !</button>
+	// 					{mintResult && (
+	// 						<div>
+	// 							<h2>Minting Result</h2>
+	// 							<pre>{JSON.stringify(mintResult, null, 2)}</pre>
+	// 							<a href={`https://suiscan.xyz/testnet/tx/${mintResult.digest}`}>View Transaction from Scan</a>
+	// 						</div>
+	// 					)}
+	// 				</>
+	// 			)}
+	// 		</section>
+	// 	</div>
+	// );
 };
 
 export default PointMarket;
-
 
 /*
 참고용: 배포한 contract 내용(0x3c2c4f8f78d63dc3a7600caf7a35cbecec233ef78eae2c4c0803eb23b8a2a17e)

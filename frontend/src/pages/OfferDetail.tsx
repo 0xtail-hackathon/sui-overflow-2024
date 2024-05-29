@@ -4,11 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ArrowLeftIcon from "@assets/images/icon-arrow-left.svg?react";
 import theme from "@/styles/theme";
-import OfferCard from "@/components/common/OfferCard";
-import CetusLogo from "@assets/images/logo-cetus.svg?react";
-import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import { useWallet } from "@suiet/wallet-kit";
-import { commaInNumbers } from "@/utils/helpers";
 import { useOfferDetailStore } from "@/stores/useOfferDetailStore";
 
 const CreateOfferContainer = styled.div`
@@ -66,14 +62,6 @@ const FormBox = styled.div`
 	box-shadow: ${({ theme }) => theme.shadows.style1};
 `;
 
-const FormSection = styled.div`
-	background-color: ${({ theme }) => theme.colors.white};
-	border-radius: 8px;
-	display: flex;
-	flex-direction: column;
-	gap: 30px;
-`;
-
 const ButtonGroup = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -115,10 +103,6 @@ const OfferDetail: React.FC = () => {
 		// TODO: Submit the form
 		offerInfo.setOfferNumber(123456);
 		setStep(4);
-	};
-
-	const handleGoToHome = () => {
-		navigate("/");
 	};
 
 	useEffect(() => {
