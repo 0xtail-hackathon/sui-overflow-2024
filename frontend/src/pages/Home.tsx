@@ -1,4 +1,4 @@
-// src/components/pages/Home.tsx
+// src/pages/Home.tsx
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import LogoCocktailFinance from "@assets/images/logo-cocktail.svg?react";

@@ -1,4 +1,4 @@
-// src/components/CreateOffer/CreateOffer.tsx
+// src/pages/OfferDetail.tsx
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -56,7 +56,7 @@ const ContentContainer = styled.div`
 	width: 620px;
 `;
 
-const OfferFormBox = styled.div`
+const FormBox = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -121,6 +121,11 @@ const OfferDetail: React.FC = () => {
 		navigate("/");
 	};
 
+	useEffect(() => {
+		console.log(`Offer Detail: ${JSON.stringify(offerInfo)}`);
+		console.log(`Wallet: ${wallet.address}`);
+	}, []);
+
 	if (step < 4)
 		return (
 			<CreateOfferContainer>
@@ -129,12 +134,16 @@ const OfferDetail: React.FC = () => {
 					<h2>Offer Detail</h2>
 				</TitleBox>
 				<ContentContainer>
+					<FormBox></FormBox>
 					<ButtonGroup>
 						<Button onClick={handleBack}>Back</Button>
 						<Button $primary onClick={handleSubmit}>
 							Take Offer
 						</Button>
 					</ButtonGroup>
+				</ContentContainer>
+				<ContentContainer>
+					<FormBox></FormBox>
 				</ContentContainer>
 			</CreateOfferContainer>
 		);

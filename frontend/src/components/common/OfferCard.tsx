@@ -167,8 +167,16 @@ const OfferCard: React.FC<CardProps> = ({
 						<TokenLogoImage>{logo}</TokenLogoImage>
 					) : (
 						<>
-							<TokenLogoImage>{tokenName === "Cetus" && <CetusLogo />}</TokenLogoImage>
-							<TokenLogoImage>{tokenName === "Scallop" && <ScallopLogo />}</TokenLogoImage>
+							{tokenName === "Scallop" && (
+								<TokenLogoImage>
+									<ScallopLogo />
+								</TokenLogoImage>
+							)}
+							{tokenName === "Cetus" && (
+								<TokenLogoImage>
+									<CetusLogo />
+								</TokenLogoImage>
+							)}
 						</>
 					)}
 					<SuiLogoImage />

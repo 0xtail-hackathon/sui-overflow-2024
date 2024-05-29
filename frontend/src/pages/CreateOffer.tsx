@@ -1,4 +1,4 @@
-// src/components/CreateOffer/CreateOffer.tsx
+// src/pages/OfferDetail.tsx
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,6 @@ import theme from "@/styles/theme";
 import OfferCard from "@/components/common/OfferCard";
 import { useWallet } from "@suiet/wallet-kit";
 import { commaInNumbers } from "@/utils/helpers";
-import StyledLink from "@/components/common/StyledLink";
 
 const CreateOfferContainer = styled.div`
 	position: relative;
@@ -56,18 +55,6 @@ const ContentContainer = styled.div`
 	flex-direction: column;
 	gap: 20px;
 	width: 620px;
-
-	&.last-step {
-		gap: 40px;
-
-		> .text-box {
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-			align-items: center;
-			text-align: center;
-		}
-	}
 `;
 
 const CreateFormBox = styled.div`
@@ -177,12 +164,30 @@ const Button = styled.button<{ $primary?: boolean }>`
 	}
 `;
 
+const StyledLink = styled.a`
+	color: ${({ theme }) => theme.colors.primary};
+	text-decoration: none;
+	font-weight: bold;
+
+	&:hover {
+		text-decoration: underline;
+		color: ${({ theme }) => theme.colors.secondary};
+	}
+`;
+
 const CreateOffer: React.FC = () => {
 	const [step, setStep] = useState(1);
 	const navigate = useNavigate();
 	const offerInfo = useCreateOfferStore();
 	const wallet = useWallet();
 
+	useEffect(() => {
+		if (!wallet.connected) {
+			navigate("/"); // 연결되지 않은 경우 홈 페이지로 리디렉션
+		}
+	}, [wallet.connected, navigate]);
+
+	// 초기 설정
 	useEffect(() => {
 		offerInfo.setNetwork("SUI");
 		offerInfo.setOfferType("selling");
@@ -203,7 +208,7 @@ const CreateOffer: React.FC = () => {
 
 	const handleSubmit = () => {
 		// TODO: Submit the form
-		offerInfo.setOfferNumber(123456);
+		offerInfo.setOfferNumber(123456); // 실제 offerNumber 생성 로직으로 대체 필요
 		setStep(4);
 	};
 
@@ -265,10 +270,10 @@ const CreateOffer: React.FC = () => {
 	return (
 		<CreateOfferContainer>
 			<TitleBox>
-				<BackToHomeButton onClick={handleBack} />
+				<BackToHomeButton onClick={handleGoToHome} />
 				<h2>Create Offer in OTC Market</h2>
 			</TitleBox>
-			<ContentContainer className="last-step">
+			<ContentContainer>
 				<OfferCard
 					offerNumber={offerInfo.offerNumber || 0}
 					tokenName={offerInfo.offerToken.name}
@@ -278,16 +283,18 @@ const CreateOffer: React.FC = () => {
 					offerType={offerInfo.offerType}
 					network={offerInfo.network}
 				/>
-				<div className="text-box">
-					<span>Your offer has been created successfully.</span>
-					<span>Offer number is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
-					<span>
-						Transaction link:{" "}
-						<StyledLink href={`https://suiscan.xyz/mainnet/tx/${offerInfo.offerNumber}`} target="_blank">
-							View on Explorer
-						</StyledLink>
-					</span>
-				</div>
+				<span>Your offer has been created successfully.</span>
+				<span>Offer number is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
+				<span>
+					Transaction link:{" "}
+					<StyledLink
+						href={`https://explorer.sui.io/tx/${offerInfo.offerNumber}`}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						View on Explorer
+					</StyledLink>
+				</span>
 				<Button $primary onClick={handleGoToHome}>
 					Okay
 				</Button>
