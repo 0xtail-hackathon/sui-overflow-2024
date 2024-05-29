@@ -246,7 +246,7 @@ const Step2: React.FC = () => {
 					</TokenOption>
 				</TokenField>
 			</FormField>
-			<FormField>
+			{/* <FormField>
 				<label>Description (Optional)</label>
 				<textarea
 					placeholder="Write your description"
@@ -254,7 +254,7 @@ const Step2: React.FC = () => {
 					value={localDescription}
 					onChange={(e) => setLocalDescription(e.target.value)}
 				/>
-			</FormField>
+			</FormField> */}
 		</>
 	);
 };
