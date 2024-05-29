@@ -21,7 +21,7 @@ Our Cocktail Finance provides a seamless platform for token transactions without
 - Flexible Pricing: You have complete control over the pricing of your tokens.
 - Secure Transactions: Our platform ensures that your transactions are safe and reliable.
 
-**For Buyers:**
+**Buyers:**
 
 - Browse Sell Offers: View a variety of sell offers to find the tokens you need.
 - Select and Purchase: Choose the sell offer that fits your requirements and complete your purchase with ease.
