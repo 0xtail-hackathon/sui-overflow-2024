@@ -67,7 +67,7 @@ const App: React.FC = () => {
 			<QueryClientProvider client={queryClient}>
 				<GlobalStyle />
 				<WalletProvider defaultWallets={[SuietWallet, SuiWallet, EthosWallet, ElliWallet, FrontierWallet, GlassWallet]}>
-					<Router basename={process.env.PUBLIC_URL}>
+					<Router>
 						<Layout>
 							<Header />
 							<Body>
