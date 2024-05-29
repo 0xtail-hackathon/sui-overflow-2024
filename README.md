@@ -7,7 +7,7 @@ Project Name: Cocktail Finance
 Contributors:
 - Seokhun Yoon (@imysh578)
 - Doyoung Kim (@Do-youngKim)
-- Yujin Park (@owenPark256)
+- Yujin Park (@yosuzzy)
 - Jina Lee (@jijijjj)
 
 
