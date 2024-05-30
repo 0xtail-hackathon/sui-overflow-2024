@@ -280,7 +280,7 @@ const OfferDetail: React.FC = () => {
 		const contractMethod = "buy_and_take";
 
 		const marketId = "0x0a407538e81bbd606b88ac206a926472f5c0e14fd5c0f3af07861e7e4328543f";
-		const item = "0xc28b7c882d28bd99ffa963b6171e050f6ba39cdfb69694677ee509e9b59d7c17";
+		const item = "0x0d28c82ee627ba60ef3bac513b352d7e31784c75b45e8d99234d261dab1a67bd";
 		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
 		console.log(txb.gas);
 
