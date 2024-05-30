@@ -193,10 +193,10 @@ const CreateOffer: React.FC = () => {
 		const item = "0x0e14252abbdc7dad7c22da9395a52997110e328093ec414a432da8e7a613fa75";
 		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
 
-		const src_amount = offerTokenAmount;
 		const src_price = suiTokenAmount;
-		const fee = "0x0b48e3336ffbc177edd13df92d47d09dc5c720b1f7aae924c873c51a5c51e91d";
+		const fee = "0xa64485282966f10fb488c71dce202513bdc60c8e6f8e6db89b95bd8f4eb99ae8";
 
+		console.log(offerTokenAmount);
 		txb.moveCall({
 			target: `${contractAddress}::${contractModule}::${contractMethod}`,
 			typeArguments: [`0x2::coin::Coin<${itemContractAddress}::managed::MANAGED>`, "0x2::sui::SUI"],
@@ -211,7 +211,7 @@ const CreateOffer: React.FC = () => {
 			console.log("Executing transaction block...");
 			console.log(txb);
 			const res = await wallet.signAndExecuteTransactionBlock({
-				transactionBlock: txb,
+				transactionBlock: txb
 			});
 			console.log("sell offer made successfully!", res);
 			alert("Congrats! sell offer is made!");
@@ -328,7 +328,7 @@ const CreateOffer: React.FC = () => {
 				<span>
 					Transaction link:{" "}
 					<StyledLink
-						href={`https://explorer.sui.io/tx/${offerInfo.transactionResult?.digest || ""}`}
+						href={`https://suiscan.xyz/devnet/tx/${offerInfo.transactionResult?.digest || ""}`}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
