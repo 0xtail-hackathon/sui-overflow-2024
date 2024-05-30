@@ -9,8 +9,8 @@ import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import { commaInNumbers } from "@/utils/helpers";
-import {useWallet} from "@suiet/wallet-kit";
-import {TransactionBlock} from "@mysten/sui.js/transactions";
+import { useWallet } from "@suiet/wallet-kit";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
 
 const OfferContainer = styled.div`
 	position: relative;
@@ -286,15 +286,12 @@ const OfferDetail: React.FC = () => {
 
 		txb.moveCall({
 			target: `${contractAddress}::${contractModule}::${contractMethod}`,
-			typeArguments: [
-				`0x2::coin::Coin<${itemContractAddress}::managed::MANAGED>`,
-				"0x2::sui::SUI",
-			],
+			typeArguments: [`0x2::coin::Coin<${itemContractAddress}::managed::MANAGED>`, "0x2::sui::SUI"],
 			arguments: [
-				txb.object(marketId),         // MARKET_ID
-				txb.pure(item),             // ITEM_ID
-				txb.object(gasCoinForToken),  // BUYER_TOKEN_PAID_OBJECT
-				txb.object(gasCoinForFee),    // BUYER_FEE_PAID_OBJECT
+				txb.object(marketId), // MARKET_ID
+				txb.pure(item), // ITEM_ID
+				txb.object(gasCoinForToken), // BUYER_TOKEN_PAID_OBJECT
+				txb.object(gasCoinForFee), // BUYER_FEE_PAID_OBJECT
 			],
 		});
 
@@ -310,26 +307,22 @@ const OfferDetail: React.FC = () => {
 
 	async function takeOffer(tokenPrice: number, fee: number) {
 		if (!wallet.connected) {
-			console.error('Wallet is not connected.');
+			console.error("Wallet is not connected.");
 			return;
 		}
 
 		// Replace with your actual API call and response handling
-		const response = await fetch('https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT', {
-			method: 'POST',
+		const response = await fetch("https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT", {
+			method: "POST",
 			headers: {
-				'Content-Type': 'application/json'
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				"jsonrpc": "2.0",
-				"id": 1,
-				"method": "suix_getAllCoins",
-				"params": [
-					wallet.account?.address,
-					null,
-					10
-				]
-			})
+				jsonrpc: "2.0",
+				id: 1,
+				method: "suix_getAllCoins",
+				params: [wallet.account?.address, null, 10],
+			}),
 		});
 
 		const data = await response.json();
@@ -360,7 +353,7 @@ const OfferDetail: React.FC = () => {
 		// If no different coin was found, attempt to find a coin that covers both tokenPrice and fee
 		if (!gasCoinForFee) {
 			for (const coin of coins) {
-				if (parseInt(coin.balance) >= (tokenPrice + fee)) {
+				if (parseInt(coin.balance) >= tokenPrice + fee) {
 					gasCoinForFee = coin.coinObjectId;
 					break;
 				}
@@ -369,17 +362,17 @@ const OfferDetail: React.FC = () => {
 
 		// If gasCoinForToken and gasCoinForFee are not assigned, handle the error appropriately
 		if (!gasCoinForToken || !gasCoinForFee) {
-			console.error('Insufficient balance for either token purchase or fee.');
+			console.error("Insufficient balance for either token purchase or fee.");
 			return;
 		}
 
 		const txb = takeOfferTransaction(gasCoinForToken, gasCoinForFee);
 
 		try {
-			console.log('Executing transaction block...');
+			console.log("Executing transaction block...");
 			console.log(txb);
 			const res = await wallet.signAndExecuteTransactionBlock({
-				transactionBlock: txb
+				transactionBlock: txb,
 			});
 			console.log("Take offer success!", res);
 			// setBuyResult(res);
@@ -392,11 +385,10 @@ const OfferDetail: React.FC = () => {
 	};
 
 	const handleSubmit = async () => {
-		await takeOffer(10000000000, 1000000000);
+		await takeOffer(Number(offerInfo.suiToken.amount) * 1_000_000_000, Number(offerInfo.suiToken.amount) * 10_000_000);
 		// TODO: Submit the form
-		offerInfo.setOfferNumber(123456);
 		// TODO: deliver transaction digest to offer success page
-		navigate("/offer/success");
+		// navigate("/offer/success");
 	};
 
 	return (
@@ -482,9 +474,9 @@ const OfferDetail: React.FC = () => {
 								</span>
 							</DetailContent>
 							<DetailContent>
-								<span className="label">Listing Fee (0.1%):</span>
+								<span className="label">Listing Fee (1%):</span>
 								<span className="value">
-									{Number(offerInfo.suiToken.amount) * 0.001} {offerInfo.suiToken.name} <SuiLogoImage />
+									{Number(offerInfo.suiToken.amount) * 0.01} {offerInfo.suiToken.name} <SuiLogoImage />
 								</span>
 							</DetailContent>
 						</DetailsBox>

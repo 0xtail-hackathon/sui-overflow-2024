@@ -32,7 +32,7 @@ export const useCreateOfferStore = create<OfferState>((set) => ({
 	offerNumber: undefined,
 	offerType: "selling",
 	offerToken: {
-		name: "Scallop",
+		name: "Overflow",
 		amount: "0",
 	},
 	suiToken: {
@@ -56,7 +56,7 @@ export const useCreateOfferStore = create<OfferState>((set) => ({
 			offerNumber: undefined,
 			offerType: "selling",
 			offerToken: {
-				name: "Scallop",
+				name: "Overflow",
 				amount: "0",
 			},
 			suiToken: {

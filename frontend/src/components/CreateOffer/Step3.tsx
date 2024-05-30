@@ -5,6 +5,7 @@ import { useCreateOfferStore } from "@stores/useCreateOfferStore";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
+import OverflowLogo from "@assets/images/logo-overflow.svg?react";
 import { commaInNumbers } from "@/utils/helpers";
 
 const ReviewContainer = styled.div`
@@ -15,9 +16,7 @@ const ReviewContainer = styled.div`
 	border-radius: 8px;
 `;
 
-const SuiLogoImage = styled(SuiLogo)`
-	padding: 7px;
-`;
+const SuiLogoImage = styled(SuiLogo)``;
 
 const TokenDetails = styled.div`
 	display: flex;
@@ -102,6 +101,7 @@ const OfferDetail = styled.div`
 	svg {
 		width: 40px;
 		height: 40px;
+		padding: 5px;
 	}
 
 	div {
@@ -116,8 +116,10 @@ const Step3: React.FC = () => {
 		<ReviewContainer>
 			<TokenDetails>
 				<div className="token-logo">
-					<ScallopLogo className="offer-token-logo" />
-					<SuiLogo className="sui-logo" />
+					{offerToken.name === "Overflow" && <OverflowLogo className="offer-token-logo" />}
+					{offerToken.name === "Scallop" && <ScallopLogo className="offer-token-logo" />}
+					{offerToken.name === "Cetus" && <CetusLogo className="offer-token-logo" />}
+					{/* <SuiLogo className="sui-logo" /> */}
 				</div>
 				<div>
 					<span>#{commaInNumbers(1000)}</span>
@@ -137,6 +139,7 @@ const Step3: React.FC = () => {
 					<span className="label">Want to {offerType}:</span>
 					<span className="value">
 						{offerToken.amount} {offerToken.name}
+						{offerToken.name === "Overflow" && <OverflowLogo />}
 						{offerToken.name === "Scallop" && <ScallopLogo />}
 						{offerToken.name === "Cetus" && <CetusLogo />}
 					</span>

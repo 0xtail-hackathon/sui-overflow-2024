@@ -209,7 +209,7 @@ const CreateOffer: React.FC = () => {
 
 	async function sellOffer(offerTokenAmount: number, suiTokenAmount: number) {
 		// sui decimal is 9
-		const txb = makeSellOffer(offerTokenAmount, 1000000000 * suiTokenAmount);
+		const txb = makeSellOffer(offerTokenAmount, 1_000_000_000 * suiTokenAmount);
 		try {
 			console.log("Executing transaction block...");
 			console.log(txb);

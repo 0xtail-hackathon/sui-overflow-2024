@@ -4,6 +4,7 @@ import styled from "styled-components";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
+import OverflowLogo from "@assets/images/logo-overflow.svg?react";
 import ArrowDownICon from "@assets/images/icon-arrow-down.svg?react";
 import { useCreateOfferStore } from "@stores/useCreateOfferStore";
 import { capitalizeFirstLetter } from "@/utils/helpers";
@@ -58,9 +59,7 @@ const TokenField = styled.div`
 	}
 `;
 
-const SuiTokenImage = styled(SuiLogo)`
-	padding: 6px;
-`;
+const SuiTokenImage = styled(SuiLogo)``;
 
 const Dropdown = styled.div`
 	position: relative;
@@ -200,12 +199,23 @@ const Step2: React.FC = () => {
 					/>
 					<Dropdown>
 						<TokenOption>
+							{offerToken.name === "Overflow" && <OverflowLogo />}
 							{offerToken.name === "Scallop" && <ScallopLogo />}
 							{offerToken.name === "Cetus" && <CetusLogo />}
 							{offerToken.name}
 							<ArrowDown />
 						</TokenOption>
 						<DropdownContent>
+							<div
+								onClick={() =>
+									setOfferToken({
+										...offerToken,
+										name: "Overflow",
+									})
+								}
+							>
+								<OverflowLogo /> Overflow
+							</div>
 							<div
 								onClick={() =>
 									setOfferToken({

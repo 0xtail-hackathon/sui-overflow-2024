@@ -4,6 +4,7 @@ import styled from "styled-components";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
+import OverflowLogo from "@assets/images/logo-overflow.svg?react";
 import SwapIcon from "@assets/images/icon-swap.svg?react";
 import { commaInNumbers, elipsize, shortenAddress } from "@/utils/helpers";
 import { useNavigate } from "react-router-dom";
@@ -39,8 +40,8 @@ const CardLogoBox = styled.div`
 
 const TokenLogoImage = styled.div`
 	position: relative;
-	width: 90px;
-	height: 90px;
+	width: 70px;
+	height: 70px;
 	border-radius: 50%;
 
 	svg {
@@ -48,15 +49,10 @@ const TokenLogoImage = styled.div`
 		width: 100%;
 		height: 100%;
 		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
-`;
-
-const SuiLogoImage = styled(SuiLogo)`
-	position: absolute;
-	left: 8px;
-	bottom: 8px;
-	width: 24px;
-	height: 24px;
 `;
 
 const CardHeaderTextBox = styled.div`
@@ -167,6 +163,11 @@ const OfferCard: React.FC<CardProps> = ({
 						<TokenLogoImage>{logo}</TokenLogoImage>
 					) : (
 						<>
+							{tokenName === "Overflow" && (
+								<TokenLogoImage>
+									<OverflowLogo />
+								</TokenLogoImage>
+							)}
 							{tokenName === "Scallop" && (
 								<TokenLogoImage>
 									<ScallopLogo />
@@ -179,7 +180,6 @@ const OfferCard: React.FC<CardProps> = ({
 							)}
 						</>
 					)}
-					<SuiLogoImage />
 				</CardLogoBox>
 				<CardHeaderTextBox>
 					<h2># {commaInNumbers(offerNumber)}</h2>
