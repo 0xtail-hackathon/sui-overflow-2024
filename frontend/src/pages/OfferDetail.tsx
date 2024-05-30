@@ -9,6 +9,8 @@ import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import { commaInNumbers } from "@/utils/helpers";
+import {useWallet} from "@suiet/wallet-kit";
+import {TransactionBlock} from "@mysten/sui.js/transactions";
 
 const OfferContainer = styled.div`
 	position: relative;
@@ -265,17 +267,138 @@ const DetailContent = styled.div`
 `;
 
 const OfferDetail: React.FC = () => {
+	// const [buyResult, setBuyResult] = useState<any>(null);
 	const navigate = useNavigate();
 	const offerInfo = useOfferDetailStore();
-	// const wallet = useWallet();
+	const wallet = useWallet();
 
+	function takeOfferTransaction(gasCoinForToken: string, gasCoinForFee: string) {
+		const txb = new TransactionBlock();
+
+		const contractAddress = "0xae636d4fcbc298aac86f42df99ad5bd7effc551991a53b71a2f588090d7117d3";
+		const contractModule = "marketplace";
+		const contractMethod = "buy_and_take";
+
+		const marketId = "0x0a407538e81bbd606b88ac206a926472f5c0e14fd5c0f3af07861e7e4328543f";
+		const item = "0x68f117baefb27d575639d40a17b323f097e5c55066e3ceb8946cab308c747d0e";
+		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
+		console.log(txb.gas);
+
+		txb.moveCall({
+			target: `${contractAddress}::${contractModule}::${contractMethod}`,
+			typeArguments: [
+				`0x2::coin::Coin<${itemContractAddress}::managed::MANAGED>`,
+				"0x2::sui::SUI",
+			],
+			arguments: [
+				txb.object(marketId),         // MARKET_ID
+				txb.pure(item),             // ITEM_ID
+				txb.object(gasCoinForToken),  // BUYER_TOKEN_PAID_OBJECT
+				txb.object(gasCoinForFee),    // BUYER_FEE_PAID_OBJECT
+			],
+		});
+
+		// Logging for debugging
+		console.log("Transaction Block:", txb);
+		console.log("Market ID:", marketId);
+		console.log("Item ID:", item);
+		console.log("Gas Coin for Token:", gasCoinForToken);
+		console.log("Gas Coin for Fee:", gasCoinForFee);
+
+		return txb;
+	}
+
+	async function takeOffer(tokenPrice: number, fee: number) {
+		if (!wallet.connected) {
+			console.error('Wallet is not connected.');
+			return;
+		}
+
+		// Replace with your actual API call and response handling
+		const response = await fetch('https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				"jsonrpc": "2.0",
+				"id": 1,
+				"method": "suix_getAllCoins",
+				"params": [
+					wallet.account?.address,
+					null,
+					10
+				]
+			})
+		});
+
+		const data = await response.json();
+		const coins = data.result.data;
+		console.log("coins: ", coins);
+
+		let gasCoinForToken = null;
+		let gasCoinForFee = null;
+
+		// Find a coin with balance greater than tokenPrice
+		for (const coin of coins) {
+			if (parseInt(coin.balance) >= tokenPrice) {
+				gasCoinForToken = coin.coinObjectId;
+				break;
+			}
+		}
+
+		// Find a different coin with balance greater than fee
+		for (const coin of coins) {
+			if (parseInt(coin.balance) >= fee) {
+				if (coin.coinObjectId !== gasCoinForToken) {
+					gasCoinForFee = coin.coinObjectId;
+					break;
+				}
+			}
+		}
+
+		// If no different coin was found, attempt to find a coin that covers both tokenPrice and fee
+		if (!gasCoinForFee) {
+			for (const coin of coins) {
+				if (parseInt(coin.balance) >= (tokenPrice + fee)) {
+					gasCoinForFee = coin.coinObjectId;
+					break;
+				}
+			}
+		}
+
+		// If gasCoinForToken and gasCoinForFee are not assigned, handle the error appropriately
+		if (!gasCoinForToken || !gasCoinForFee) {
+			console.error('Insufficient balance for either token purchase or fee.');
+			alert('Insufficient balance for either token purchase or fee.');
+			return;
+		}
+
+		const txb = takeOfferTransaction(gasCoinForToken, gasCoinForFee);
+
+		try {
+			console.log('Executing transaction block...');
+			console.log(txb);
+			const res = await wallet.signAndExecuteTransactionBlock({
+				transactionBlock: txb
+			});
+			console.log("Take offer success!", res);
+			alert("Congrats! Offer is taken!");
+			// setBuyResult(res);
+		} catch (e) {
+			alert("Oops, take offer failed");
+			console.error("Take offer failed", e);
+		}
+	}
 	const handleBack = () => {
 		navigate(-1);
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
+		await takeOffer(10000000000, 1000000000);
 		// TODO: Submit the form
 		offerInfo.setOfferNumber(123456);
+		// TODO: deliver transaction digest to offer success page
 		navigate("/offer/success");
 	};
 
