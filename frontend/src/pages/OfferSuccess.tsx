@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ArrowLeftIcon from "@assets/images/icon-arrow-left.svg?react";
 import SuccessIcon from "@assets/images/icon-success.svg?react";
+import StyledLink from "@/components/common/StyledLink";
+import { useNewOfferStore } from "@/stores/useNewOfferStore";
+import TransactionFailure from "@/components/common/TransactionFailure";
 
 const OfferContainer = styled.div`
 	position: relative;
@@ -75,10 +78,15 @@ const OkayButton = styled.button`
 
 const OfferSuccess: React.FC = () => {
 	const navigate = useNavigate();
+	const newOfferInfo = useNewOfferStore();
 
 	const handleGoHome = () => {
 		navigate("/");
 	};
+
+	if (!newOfferInfo.transactionResult) {
+		return <TransactionFailure />;
+	}
 
 	return (
 		<OfferContainer>
@@ -92,6 +100,13 @@ const OfferSuccess: React.FC = () => {
 					<h3>🎉Congratulations!🎉</h3>
 					<h3>The offer has been successfully taken.</h3>
 					<h3>Check your wallet for the transaction.</h3>
+					<StyledLink
+						href={`https://suiscan.xyz/devnet/tx/${newOfferInfo.transactionResult.digest || ""}`}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						View on Explorer
+					</StyledLink>
 				</TextBox>
 				<OkayButton onClick={handleGoHome}>Okay</OkayButton>
 			</ContentContainer>

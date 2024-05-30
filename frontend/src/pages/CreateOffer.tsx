@@ -10,7 +10,6 @@ import { useCreateOfferStore } from "@stores/useCreateOfferStore";
 import theme from "@/styles/theme";
 import OfferCard from "@/components/common/OfferCard";
 import { useWallet } from "@suiet/wallet-kit";
-import { commaInNumbers } from "@/utils/helpers";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import TransactionFailure from "@components/common/TransactionFailure";
 import { useNewOfferStore } from "@/stores/useNewOfferStore";
@@ -199,7 +198,9 @@ const CreateOffer: React.FC = () => {
 		const item = "0x2a3c30a7adb88965a7925cb67b08625d38480ebdc397dfb0b496ab76299f65f5";
 
 		const src_price = suiTokenAmount;
-		const fee = "0xf915def5807660a306e58b2e7754a275b9bdc7214401c82873103be65e2f6a18";
+
+		// TODO: 여기 수정하면서 데모용으로 넣은 fee 값
+		const fee = "0x0077757a4505ab3b59678f974f75ec783eb9fba7cea468b50edcb0e8df7c6cc4";
 
 		console.log(offerTokenAmount);
 		txb.moveCall({
@@ -224,7 +225,10 @@ const CreateOffer: React.FC = () => {
 			offerInfo.setTransactionResult(res); // Update the state with the transaction result
 			offerInfo.setMintResult(res);
 
-			newOfferInfo.setAll(offerInfo);
+			newOfferInfo.setNetwork(offerInfo.network);
+			newOfferInfo.setOfferType(offerInfo.offerType);
+			newOfferInfo.setOfferToken(offerInfo.offerToken);
+			newOfferInfo.setSuiToken(offerInfo.suiToken);
 		} catch (e) {
 			console.error("sell offer failed", e);
 			setTransactionFailed(true); // Update state to indicate transaction failure
@@ -358,7 +362,6 @@ const CreateOffer: React.FC = () => {
 						network={offerInfo.network}
 					/>
 					<span>Your offer has been created successfully.</span>
-					<span>Item ID is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
 					<span>
 						Transaction link:
 						<StyledLink

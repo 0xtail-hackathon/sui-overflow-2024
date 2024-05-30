@@ -137,7 +137,10 @@ const NetworkStatus = styled.span`
 	white-space: nowrap;
 `;
 
-const CustomConnectButton = styled(ConnectButton)``;
+const CustomConnectButton = styled(ConnectButton)`
+	font-size: 1rem !important;
+	min-width: 200px !important;
+`;
 
 const Header: React.FC = () => {
 	const wallet = useWallet();

@@ -25,16 +25,6 @@ interface OfferState {
 	setTransactionResult: (transactionResult: SuiSignAndExecuteTransactionBlockOutput) => void;
 	setMintResult: (mintResult: SuiSignAndExecuteTransactionBlockOutput) => void;
 	setOfferInitialValues: () => void;
-	setAll: (offer: {
-		network: string;
-		offerNumber?: number;
-		offerType: "selling" | "buying";
-		offerToken: TokenInfo;
-		suiToken: TokenInfo;
-		description: string;
-		transactionResult?: SuiSignAndExecuteTransactionBlockOutput;
-		mintResult?: SuiSignAndExecuteTransactionBlockOutput;
-	}) => void;
 }
 
 export const useNewOfferStore = create<OfferState>((set) => ({
@@ -77,5 +67,4 @@ export const useNewOfferStore = create<OfferState>((set) => ({
 			transactionResult: undefined,
 			mintResult: undefined,
 		}),
-	setAll: (offer) => set({ ...offer }),
 }));

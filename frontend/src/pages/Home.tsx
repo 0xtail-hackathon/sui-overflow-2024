@@ -152,7 +152,10 @@ const Home: React.FC = () => {
 
 	useEffect(() => {
 		setToday(todayYYYYMMDD());
-		if (!newOfferInfo.offerToken.amount)
+	}, [newOfferInfo.offerToken.amount]);
+
+	useEffect(() => {
+		if (newOfferInfo.offerToken.amount !== "0")
 			setOfferCards((prev) => {
 				return [
 					...prev,
@@ -167,7 +170,7 @@ const Home: React.FC = () => {
 					},
 				];
 			});
-	}, []);
+	}, [newOfferInfo.offerToken.amount]);
 
 	return (
 		<HomeContainer>

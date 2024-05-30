@@ -12,6 +12,7 @@ import OverflowLogo from "@assets/images/logo-overflow.svg?react";
 import { commaInNumbers } from "@/utils/helpers";
 import { useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { useNewOfferStore } from "@/stores/useNewOfferStore";
 
 const OfferContainer = styled.div`
 	position: relative;
@@ -267,6 +268,7 @@ const OfferDetail: React.FC = () => {
 	// const [buyResult, setBuyResult] = useState<any>(null);
 	const navigate = useNavigate();
 	const offerInfo = useOfferDetailStore();
+	const newOfferInfo = useNewOfferStore();
 	const wallet = useWallet();
 
 	useEffect(() => {
@@ -378,7 +380,7 @@ const OfferDetail: React.FC = () => {
 				transactionBlock: txb,
 			});
 			console.log("Take offer success!", res);
-			// setBuyResult(res);
+			newOfferInfo.setTransactionResult(res);
 		} catch (e) {
 			console.error("Take offer failed", e);
 		}
@@ -390,12 +392,12 @@ const OfferDetail: React.FC = () => {
 	const handleSubmit = async () => {
 		console.log("Offer Info:", JSON.stringify(offerInfo));
 		console.log("SUI:", Number(offerInfo.suiToken.amount) * 1_000_000_000);
-		// await takeOffer(Number(offerInfo.suiToken.amount) * 1_000_000_000, Number(offerInfo.suiToken.amount) * 100_000_000);
-		await takeOffer(10_000_000_000, 1_000_000_000);
+		await takeOffer(Number(offerInfo.suiToken.amount) * 1_000_000_000, Number(offerInfo.suiToken.amount) * 100_000_000);
+		// await takeOffer(10_000_000_000, 1_000_000_000);
 
 		// TODO: Submit the form
 		// TODO: deliver transaction digest to offer success page
-		// navigate("/offer/success");
+		navigate("/offer/success");
 	};
 
 	return (
@@ -427,6 +429,7 @@ const OfferDetail: React.FC = () => {
 								<TokenField>
 									<input type="text" value={offerInfo.offerToken.amount} readOnly />
 									<div>
+										{offerInfo.offerToken.name === "Overflow" && <OverflowLogo />}
 										{offerInfo.offerToken.name === "Scallop" && <ScallopLogo />}
 										{offerInfo.offerToken.name === "Cetus" && <CetusLogo />}
 										<span>{offerInfo.offerToken.name}</span>
@@ -471,6 +474,7 @@ const OfferDetail: React.FC = () => {
 								<span className="label">Want to {offerInfo.offerType}:</span>
 								<span className="value">
 									{offerInfo.offerToken.amount} {offerInfo.offerToken.name}
+									{offerInfo.offerToken.name === "Overflow" && <OverflowLogo />}
 									{offerInfo.offerToken.name === "Scallop" && <ScallopLogo />}
 									{offerInfo.offerToken.name === "Cetus" && <CetusLogo />}
 								</span>
