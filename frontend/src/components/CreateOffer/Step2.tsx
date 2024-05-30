@@ -256,15 +256,6 @@ const Step2: React.FC = () => {
 					</TokenOption>
 				</TokenField>
 			</FormField>
-			{/* <FormField>
-				<label>Description (Optional)</label>
-				<textarea
-					placeholder="Write your description"
-					maxLength={180}
-					value={localDescription}
-					onChange={(e) => setLocalDescription(e.target.value)}
-				/>
-			</FormField> */}
 		</>
 	);
 };

@@ -1,7 +1,6 @@
 // src/components/common/Card.tsx
 import React from "react";
 import styled from "styled-components";
-import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import OverflowLogo from "@assets/images/logo-overflow.svg?react";

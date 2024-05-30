@@ -1,5 +1,5 @@
 // src/pages/OfferDetail.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ArrowLeftIcon from "@assets/images/icon-arrow-left.svg?react";
@@ -8,6 +8,7 @@ import { useOfferDetailStore } from "@/stores/useOfferDetailStore";
 import ScallopLogo from "@assets/images/logo-scallop.svg?react";
 import SuiLogo from "@assets/images/logo-sui.svg?react";
 import CetusLogo from "@assets/images/logo-cetus.svg?react";
+import OverflowLogo from "@assets/images/logo-overflow.svg?react";
 import { commaInNumbers } from "@/utils/helpers";
 import { useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
@@ -233,10 +234,6 @@ const DetailContent = styled.div`
 	justify-content: space-between;
 	align-items: center;
 
-	/* &:not(:last-child) {
-		border-bottom: 1px solid ${({ theme }) => theme.colors.light_gray};
-	} */
-
 	span {
 		font-size: 1rem;
 	}
@@ -272,6 +269,12 @@ const OfferDetail: React.FC = () => {
 	const offerInfo = useOfferDetailStore();
 	const wallet = useWallet();
 
+	useEffect(() => {
+		if (!offerInfo.offerToken.amount) {
+			navigate("/");
+		}
+	}, []);
+
 	function takeOfferTransaction(gasCoinForToken: string, gasCoinForFee: string) {
 		const txb = new TransactionBlock();
 
@@ -280,7 +283,7 @@ const OfferDetail: React.FC = () => {
 		const contractMethod = "buy_and_take";
 
 		const marketId = "0x0a407538e81bbd606b88ac206a926472f5c0e14fd5c0f3af07861e7e4328543f";
-		const item = "0x0d28c82ee627ba60ef3bac513b352d7e31784c75b45e8d99234d261dab1a67bd";
+		const item = "0x2a3c30a7adb88965a7925cb67b08625d38480ebdc397dfb0b496ab76299f65f5";
 		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
 		console.log(txb.gas);
 
@@ -385,7 +388,11 @@ const OfferDetail: React.FC = () => {
 	};
 
 	const handleSubmit = async () => {
-		await takeOffer(Number(offerInfo.suiToken.amount) * 1_000_000_000, Number(offerInfo.suiToken.amount) * 10_000_000);
+		console.log("Offer Info:", JSON.stringify(offerInfo));
+		console.log("SUI:", Number(offerInfo.suiToken.amount) * 1_000_000_000);
+		// await takeOffer(Number(offerInfo.suiToken.amount) * 1_000_000_000, Number(offerInfo.suiToken.amount) * 100_000_000);
+		await takeOffer(10_000_000_000, 1_000_000_000);
+
 		// TODO: Submit the form
 		// TODO: deliver transaction digest to offer success page
 		// navigate("/offer/success");
@@ -403,8 +410,9 @@ const OfferDetail: React.FC = () => {
 						<ReviewContainer>
 							<TokenDetails>
 								<div className="token-logo">
-									<ScallopLogo className="offer-token-logo" />
-									<SuiLogo className="sui-logo" />
+									{offerInfo.offerToken.name === "Overflow" && <OverflowLogo className="offer-token-logo" />}
+									{offerInfo.offerToken.name === "Scallop" && <ScallopLogo className="offer-token-logo" />}
+									{offerInfo.offerToken.name === "Cetus" && <CetusLogo className="offer-token-logo" />}
 								</div>
 								<div>
 									<span>#{commaInNumbers(1000)}</span>

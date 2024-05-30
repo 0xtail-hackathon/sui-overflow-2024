@@ -151,9 +151,9 @@ const Step3: React.FC = () => {
 					</span>
 				</OfferDetail>
 				<OfferDetail>
-					<span className="label">Listing Fee (0.1%):</span>
+					<span className="label">Listing Fee (1%):</span>
 					<span className="value">
-						{Number(suiToken.amount) * 0.001} {suiToken.name} <SuiLogoImage />
+						{Number(suiToken.amount) * 0.01} {suiToken.name} <SuiLogoImage />
 					</span>
 				</OfferDetail>
 			</OfferDetailsBox>

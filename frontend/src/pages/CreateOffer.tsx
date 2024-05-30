@@ -13,6 +13,7 @@ import { useWallet } from "@suiet/wallet-kit";
 import { commaInNumbers } from "@/utils/helpers";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import TransactionFailure from "@components/common/TransactionFailure";
+import { useNewOfferStore } from "@/stores/useNewOfferStore";
 
 const CreateOfferContainer = styled.div`
 	position: relative;
@@ -182,6 +183,7 @@ const CreateOffer: React.FC = () => {
 	const [transactionFailed, setTransactionFailed] = useState(false);
 	const navigate = useNavigate();
 	const offerInfo = useCreateOfferStore();
+	const newOfferInfo = useNewOfferStore();
 	const wallet = useWallet();
 
 	function makeSellOffer(offerTokenAmount: number, suiTokenAmount: number) {
@@ -192,11 +194,12 @@ const CreateOffer: React.FC = () => {
 		const contractMethod = "list";
 
 		const marketId = "0x0a407538e81bbd606b88ac206a926472f5c0e14fd5c0f3af07861e7e4328543f";
-		const item = "0x0d28c82ee627ba60ef3bac513b352d7e31784c75b45e8d99234d261dab1a67bd";
 		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
 
+		const item = "0x2a3c30a7adb88965a7925cb67b08625d38480ebdc397dfb0b496ab76299f65f5";
+
 		const src_price = suiTokenAmount;
-		const fee = "0x1c4df1dca519aaaeb48c6cbf97476bb125c1b4bf01c0a3e5a938d01d33777d1b";
+		const fee = "0xf915def5807660a306e58b2e7754a275b9bdc7214401c82873103be65e2f6a18";
 
 		console.log(offerTokenAmount);
 		txb.moveCall({
@@ -213,17 +216,24 @@ const CreateOffer: React.FC = () => {
 		try {
 			console.log("Executing transaction block...");
 			console.log(txb);
+
 			const res = await wallet.signAndExecuteTransactionBlock({
 				transactionBlock: txb,
 			});
 			console.log("sell offer made successfully!", res);
 			offerInfo.setTransactionResult(res); // Update the state with the transaction result
 			offerInfo.setMintResult(res);
+
+			newOfferInfo.setAll(offerInfo);
 		} catch (e) {
 			console.error("sell offer failed", e);
 			setTransactionFailed(true); // Update state to indicate transaction failure
 		}
 	}
+
+	useEffect(() => {
+		console.log(`New Offer Info: ${JSON.stringify(newOfferInfo)}`);
+	}, [newOfferInfo]);
 
 	useEffect(() => {
 		if (!wallet.connected) {
@@ -254,6 +264,23 @@ const CreateOffer: React.FC = () => {
 		if (!transactionFailed) {
 			setStep(4);
 		}
+
+		const response = await fetch("https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				jsonrpc: "2.0",
+				id: 1,
+				method: "suix_getAllCoins",
+				params: [wallet.account?.address, null, 10],
+			}),
+		});
+
+		const data = await response.json();
+		const coins = data.result.data;
+		console.log("coins: ", coins);
 	};
 
 	const handleGoToHome = () => {
@@ -333,7 +360,7 @@ const CreateOffer: React.FC = () => {
 					<span>Your offer has been created successfully.</span>
 					<span>Item ID is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
 					<span>
-						Transaction link:{" "}
+						Transaction link:
 						<StyledLink
 							href={`https://suiscan.xyz/devnet/tx/${offerInfo.transactionResult.digest || ""}`}
 							target="_blank"

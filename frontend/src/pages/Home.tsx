@@ -5,6 +5,7 @@ import LogoCocktailFinance from "@assets/images/logo-cocktail.svg?react";
 import OfferCard from "@components/common/OfferCard";
 import { todayYYYYMMDD } from "@/utils/helpers";
 import { useNavigate } from "react-router-dom";
+import { useNewOfferStore } from "@/stores/useNewOfferStore";
 
 const HomeContainer = styled.div`
 	display: flex;
@@ -105,7 +106,8 @@ const OffersSection = styled.div`
 const Home: React.FC = () => {
 	const [today, setToday] = useState("YYYY.MM.DD");
 	const navigate = useNavigate();
-	const offerCards: CardProps[] = [
+	const newOfferInfo = useNewOfferStore();
+	const [offerCards, setOfferCards] = useState<CardProps[]>([
 		{
 			tokenName: "Cetus",
 			tokenAmount: "100.0",
@@ -142,7 +144,7 @@ const Home: React.FC = () => {
 			network: "SUI",
 			offerType: "selling",
 		},
-	];
+	]);
 
 	const handleCreateOfferClick = () => {
 		navigate("/offer/create");
@@ -150,6 +152,21 @@ const Home: React.FC = () => {
 
 	useEffect(() => {
 		setToday(todayYYYYMMDD());
+		if (!newOfferInfo.offerToken.amount)
+			setOfferCards((prev) => {
+				return [
+					...prev,
+					{
+						tokenName: newOfferInfo.offerToken.name,
+						tokenAmount: newOfferInfo.offerToken.amount,
+						suiAmount: newOfferInfo.suiToken.amount,
+						offerNumber: 3233,
+						offerAccountAddress: "0x1234567890abcdef1234567890abcdef12345678",
+						network: newOfferInfo.network,
+						offerType: newOfferInfo.offerType,
+					},
+				];
+			});
 	}, []);
 
 	return (
