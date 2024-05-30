@@ -190,11 +190,11 @@ const CreateOffer: React.FC = () => {
 		const contractMethod = "list";
 
 		const marketId = "0x0a407538e81bbd606b88ac206a926472f5c0e14fd5c0f3af07861e7e4328543f";
-		const item = "0x0e14252abbdc7dad7c22da9395a52997110e328093ec414a432da8e7a613fa75";
+		const item = "0x68f117baefb27d575639d40a17b323f097e5c55066e3ceb8946cab308c747d0e";
 		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
 
 		const src_price = suiTokenAmount;
-		const fee = "0xa64485282966f10fb488c71dce202513bdc60c8e6f8e6db89b95bd8f4eb99ae8";
+		const fee = "0xe24644c4c24a2ab2868ce851fe8c35cfc86191585226a878e3c76fe2001d796b";
 
 		console.log(offerTokenAmount);
 		txb.moveCall({
@@ -206,7 +206,8 @@ const CreateOffer: React.FC = () => {
 	}
 
 	async function sellOffer(offerTokenAmount: number, suiTokenAmount: number) {
-		const txb = makeSellOffer(offerTokenAmount, suiTokenAmount);
+		// sui decimal is 9
+		const txb = makeSellOffer(offerTokenAmount, 1000000000*suiTokenAmount);
 		try {
 			console.log("Executing transaction block...");
 			console.log(txb);
