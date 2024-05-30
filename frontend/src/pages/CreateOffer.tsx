@@ -215,11 +215,9 @@ const CreateOffer: React.FC = () => {
 				transactionBlock: txb
 			});
 			console.log("sell offer made successfully!", res);
-			alert("Congrats! sell offer is made!");
 			offerInfo.setTransactionResult(res); // Update the state with the transaction result
 			offerInfo.setMintResult(res);
 		} catch (e) {
-			alert("Oops, sell offer failed");
 			console.error("sell offer failed", e);
 		}
 	}

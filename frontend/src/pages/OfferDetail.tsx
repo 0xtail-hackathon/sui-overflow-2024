@@ -370,7 +370,6 @@ const OfferDetail: React.FC = () => {
 		// If gasCoinForToken and gasCoinForFee are not assigned, handle the error appropriately
 		if (!gasCoinForToken || !gasCoinForFee) {
 			console.error('Insufficient balance for either token purchase or fee.');
-			alert('Insufficient balance for either token purchase or fee.');
 			return;
 		}
 
@@ -383,10 +382,8 @@ const OfferDetail: React.FC = () => {
 				transactionBlock: txb
 			});
 			console.log("Take offer success!", res);
-			alert("Congrats! Offer is taken!");
 			// setBuyResult(res);
 		} catch (e) {
-			alert("Oops, take offer failed");
 			console.error("Take offer failed", e);
 		}
 	}
