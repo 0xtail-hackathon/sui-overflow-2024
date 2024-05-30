@@ -159,7 +159,7 @@ const Step2: React.FC = () => {
 		useCreateOfferStore();
 	const [offerTokenAmount, setOfferTokenAmount] = useState(offerToken.amount);
 	const [suiTokenAmount, setSuiTokenAmount] = useState(suiToken.amount);
-	const [localDescription, setLocalDescription] = useState(description);
+	const [localDescription] = useState(description);
 
 	const debouncedOfferTokenAmount = useDebounce(offerTokenAmount, 500);
 	const debouncedSuiTokenAmount = useDebounce(suiTokenAmount, 500);
