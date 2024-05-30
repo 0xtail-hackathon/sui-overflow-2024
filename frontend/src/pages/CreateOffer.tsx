@@ -12,6 +12,7 @@ import OfferCard from "@/components/common/OfferCard";
 import { useWallet } from "@suiet/wallet-kit";
 import { commaInNumbers } from "@/utils/helpers";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
+import TransactionFailure from "@components/common/TransactionFailure";
 
 const CreateOfferContainer = styled.div`
 	position: relative;
@@ -178,6 +179,7 @@ const StyledLink = styled.a`
 
 const CreateOffer: React.FC = () => {
 	const [step, setStep] = useState(1);
+	const [transactionFailed, setTransactionFailed] = useState(false);
 	const navigate = useNavigate();
 	const offerInfo = useCreateOfferStore();
 	const wallet = useWallet();
@@ -207,18 +209,19 @@ const CreateOffer: React.FC = () => {
 
 	async function sellOffer(offerTokenAmount: number, suiTokenAmount: number) {
 		// sui decimal is 9
-		const txb = makeSellOffer(offerTokenAmount, 1000000000*suiTokenAmount);
+		const txb = makeSellOffer(offerTokenAmount, 1000000000 * suiTokenAmount);
 		try {
 			console.log("Executing transaction block...");
 			console.log(txb);
 			const res = await wallet.signAndExecuteTransactionBlock({
-				transactionBlock: txb
+				transactionBlock: txb,
 			});
 			console.log("sell offer made successfully!", res);
 			offerInfo.setTransactionResult(res); // Update the state with the transaction result
 			offerInfo.setMintResult(res);
 		} catch (e) {
 			console.error("sell offer failed", e);
+			setTransactionFailed(true); // Update state to indicate transaction failure
 		}
 	}
 
@@ -248,12 +251,16 @@ const CreateOffer: React.FC = () => {
 
 	const handleCreateOffer = async () => {
 		await sellOffer(Number(offerInfo.offerToken.amount), Number(offerInfo.suiToken.amount));
-		setStep(4);
+		if (!transactionFailed) {
+			setStep(4);
+		}
 	};
 
 	const handleGoToHome = () => {
 		navigate("/");
 	};
+
+	if (transactionFailed) return <TransactionFailure />;
 
 	if (step < 4)
 		return (
@@ -306,40 +313,41 @@ const CreateOffer: React.FC = () => {
 		);
 
 	// Step 4 - Success page
-	return (
-		<CreateOfferContainer>
-			<TitleBox>
-				<BackToHomeButton onClick={handleGoToHome} />
-				<h2>Create Offer in OTC Market</h2>
-			</TitleBox>
-			<ContentContainer>
-				<OfferCard
-					offerNumber={offerInfo.offerNumber || 0}
-					tokenName={offerInfo.offerToken.name}
-					offerAccountAddress={wallet.account?.address || ""}
-					tokenAmount={offerInfo.offerToken.amount}
-					suiAmount={offerInfo.suiToken.amount}
-					offerType={offerInfo.offerType}
-					network={offerInfo.network}
-				/>
-				<span>Your offer has been created successfully.</span>
-				<span>Item ID is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
-				<span>
-					Transaction link:{" "}
-					<StyledLink
-						href={`https://suiscan.xyz/devnet/tx/${offerInfo.transactionResult?.digest || ""}`}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						View on Explorer
-					</StyledLink>
-				</span>
-				<Button $primary onClick={handleGoToHome}>
-					Okay
-				</Button>
-			</ContentContainer>
-		</CreateOfferContainer>
-	);
+	if (step === 4 && offerInfo.transactionResult)
+		return (
+			<CreateOfferContainer>
+				<TitleBox>
+					<BackToHomeButton onClick={handleGoToHome} />
+					<h2>Create Offer in OTC Market</h2>
+				</TitleBox>
+				<ContentContainer>
+					<OfferCard
+						offerNumber={offerInfo.offerNumber || 0}
+						tokenName={offerInfo.offerToken.name}
+						offerAccountAddress={wallet.account?.address || ""}
+						tokenAmount={offerInfo.offerToken.amount}
+						suiAmount={offerInfo.suiToken.amount}
+						offerType={offerInfo.offerType}
+						network={offerInfo.network}
+					/>
+					<span>Your offer has been created successfully.</span>
+					<span>Item ID is #{commaInNumbers(offerInfo.offerNumber || 0)}.</span>
+					<span>
+						Transaction link:{" "}
+						<StyledLink
+							href={`https://suiscan.xyz/devnet/tx/${offerInfo.transactionResult.digest || ""}`}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							View on Explorer
+						</StyledLink>
+					</span>
+					<Button $primary onClick={handleGoToHome}>
+						Okay
+					</Button>
+				</ContentContainer>
+			</CreateOfferContainer>
+		);
 };
 
 export default CreateOffer;
