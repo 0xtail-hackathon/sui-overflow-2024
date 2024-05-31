@@ -396,7 +396,6 @@ const OfferDetail: React.FC = () => {
 		// await takeOffer(10_000_000_000, 1_000_000_000);
 
 		// TODO: Submit the form
-		// TODO: deliver transaction digest to offer success page
 		navigate("/offer/success");
 	};
 
