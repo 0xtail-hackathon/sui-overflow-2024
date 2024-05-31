@@ -185,7 +185,7 @@ const CreateOffer: React.FC = () => {
 	const newOfferInfo = useNewOfferStore();
 	const wallet = useWallet();
 
-	function makeSellOffer(offerTokenAmount: number, suiTokenAmount: number) {
+	function makeSellOffer(offerTokenAmount: number, suiTokenAmount: number, sellerFeeObject: string) {
 		const txb = new TransactionBlock();
 
 		const contractAddress = "0xae636d4fcbc298aac86f42df99ad5bd7effc551991a53b71a2f588090d7117d3";
@@ -195,12 +195,12 @@ const CreateOffer: React.FC = () => {
 		const marketId = "0x0a407538e81bbd606b88ac206a926472f5c0e14fd5c0f3af07861e7e4328543f";
 		const itemContractAddress = "0x58643225dab4e028d600b1b89d89fa613c4a0769d158fdaaf04d596055584a65";
 
+		// TODO: 데모용으로 item object
 		const item = "0x2a3c30a7adb88965a7925cb67b08625d38480ebdc397dfb0b496ab76299f65f5";
 
 		const src_price = suiTokenAmount;
 
-		// TODO: 여기 수정하면서 데모용으로 넣은 fee 값
-		const fee = "0x0077757a4505ab3b59678f974f75ec783eb9fba7cea468b50edcb0e8df7c6cc4";
+		const fee = sellerFeeObject;
 
 		console.log(offerTokenAmount);
 		txb.moveCall({
@@ -212,8 +212,33 @@ const CreateOffer: React.FC = () => {
 	}
 
 	async function sellOffer(offerTokenAmount: number, suiTokenAmount: number) {
+		const response = await fetch("https://sui-devnet.blockeden.xyz/9ib8BrdidJqejt8L86bT", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				jsonrpc: "2.0",
+				id: 1,
+				method: "suix_getAllCoins",
+				params: [wallet.account?.address, null, 10],
+			}),
+		});
+		const data = await response.json();
+		const coins = data.result.data;
+		console.log(coins);
+
+		let sellerFeeObject = null;
+
+		for (const coin of coins) {
+			if (parseInt(coin.balance) >= 10) {
+				sellerFeeObject = coin.coinObjectId;
+				break;
+			}
+		}
+		console.log("sellerFeeObject: ", sellerFeeObject);
 		// sui decimal is 9
-		const txb = makeSellOffer(offerTokenAmount, 1_000_000_000 * suiTokenAmount);
+		const txb = makeSellOffer(offerTokenAmount, 1_000_000_000 * suiTokenAmount, sellerFeeObject);
 		try {
 			console.log("Executing transaction block...");
 			console.log(txb);
