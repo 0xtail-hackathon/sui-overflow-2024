@@ -6,6 +6,7 @@
 // https://suiscan.xyz/devnet/object/0xcfb9585afb821567a4453d7e5566c0a9f74a14f7ede79640ad3900b28b385389/contracts
 
 module marketplace::marketplace {
+    use std::type_name;
     use sui::bag::{Bag, Self};
     use sui::sui::SUI;
     use sui::dynamic_object_field as ofield;
@@ -13,6 +14,7 @@ module marketplace::marketplace {
     use sui::object::{Self, ID, UID};
     use sui::coin::{Self, Coin};
     use std::vector;
+    use sui::package;
     use sui::transfer;
 
     /// For when amount paid does not match the expected.
@@ -115,9 +117,10 @@ module marketplace::marketplace {
         } = bag::remove(&mut marketplace.items, item_id);
 
         assert!(tx_context::sender(ctx) == owner, ENotOwner);
+        remove_item_list(marketplace, item_id);
+
         let item = ofield::remove(&mut id, true);
         object::delete(id);
-        remove_item_list(marketplace, item_id);
 
         item
     }
@@ -150,6 +153,9 @@ module marketplace::marketplace {
             offer_type,
         } = bag::remove(&mut marketplace.items, item_id);
 
+        // let coin_type = type_name::get_with_original_ids<K>();
+        // type_name::get_address(&coin_type);
+
         assert!(owner != tx_context::sender(ctx), EInvalidBuying);
         assert!(deal_amount <= coin::value(paid), EAmountIncorrect);
 
@@ -160,10 +166,10 @@ module marketplace::marketplace {
 
         coin::join(paid, change_coin);
         transfer::public_transfer(paid_coin, owner);
+        remove_item_list(marketplace, item_id);
 
         let item = ofield::remove(&mut id, true);
         object::delete(id);
-        remove_item_list(marketplace, item_id);
 
         item
     }
